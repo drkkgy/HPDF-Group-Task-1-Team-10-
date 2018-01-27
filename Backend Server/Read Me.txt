@@ -1,0 +1,25 @@
+Hello Manish Sir
+
+TO use this Basic api urls to be linked are
+
+127.0.0.1:3000/ <---- Basic Starting Page of the server
+ 
+
+127.0.0.1:3000/Auth/[id here]/[pass here] <---------Authenticaion Dummy where the default id and pass are 123/123
+
+eg
+127.0.0.1:3000/Auth/123/123
+
+127.0.0.1:3000/register/[Name here]/[UserName here]/[Email here]<-------- Register Dummy it takes in name and return them on the browser
+
+eg
+
+127.0.0.1:3000/register/Star Wars/Skywalker/a@gmail.com
+
+127.0.0.1:3000/auth/Send_Notification/[senders email or contact id here]/[Notification_Message here] <-----------Notification sending dummy where it takes in the values from the url and prints them back on the browser
+
+eg
+127.0.0.1:3000/auth/Send_Notification/Ranjan@hotmail.com/Hey jude this is mymessage to you
+
+Created by Ankit Yadav V 1.1 
+Cheers !!
