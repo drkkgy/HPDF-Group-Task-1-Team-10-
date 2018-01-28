@@ -1,0 +1,147 @@
+.App {
+  text-align: center;
+
+}
+
+.App-logo {
+  animation: App-logo-spin infinite 20s linear;
+  height: 80px;
+}
+
+.App-header {
+  background-color: #222;
+  height: 150px;
+  padding: 20px;
+  color: white;
+}
+
+.App-title {
+  font-size: 1.5em;
+}
+
+.App-intro {
+  font-size: large;
+}
+
+@keyframes App-logo-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+
+body{
+
+  background: #24C6DC; /* fallback for old browsers */
+background: -webkit-linear-gradient(to left, #24C6DC , #514A9D); /* Chrome 10-25, Safari 5.1-6 */
+background: linear-gradient(to left, #24C6DC , #514A9D); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+
+
+}
+
+
+
+
+input[type="email"] {
+  width: 480px;
+  margin-top: 20px;
+  padding: 10px;
+  font-size: 30px;
+  border: none;
+  border-bottom: solid 2px #c9c9c9;
+  transition: border 0.3s;
+  border: 1px solid #b7b7b7;
+  border-radius: 9px;
+  box-shadow: 2px 2px 2px 0 rgba(0,0,0,0.2) inset;
+  text-shadow: 1px 1px 0 rgba(255,255,255,0.66) ;
+}
+
+input[type="password"] {
+  width: 480px;
+  margin-top: 20px;
+  padding: 10px;
+  font-size: 30px;
+
+  border: none;
+  border-bottom: solid 2px #c9c9c9;
+  transition: border 0.3s;
+  border: 1px solid #b7b7b7;
+  border-radius: 9px;
+  box-shadow: 2px 2px 2px 0 rgba(0,0,0,0.2) inset;
+  text-shadow: 1px 1px 0 rgba(255,255,255,0.66) ;
+}
+
+input[type="text"] {
+  width: 480px;
+  margin-top: 20px;
+  padding: 10px;
+  font-size: 30px;
+
+  border: none;
+  border-bottom: solid 2px #c9c9c9;
+  transition: border 0.3s;
+  border: 1px solid #b7b7b7;
+  border-radius: 9px;
+  box-shadow: 2px 2px 2px 0 rgba(0,0,0,0.2) inset;
+  text-shadow: 1px 1px 0 rgba(255,255,255,0.66) ;
+}
+
+input[type="email"]:focus,
+input[type="password"].focus {
+  border-bottom: solid 2px #969696;
+}
+
+button {
+height: 10%;
+width: 35% 35%;
+display: inline-block;
+padding: 10px 20px 10px 16px;
+border: 1px solid #018dc4;
+border-radius: 22px;
+font: normal 18px/normal "Times New Roman", Times, serif;
+color: rgba(255,255,255,0.9);
+background: rgba(90,172,226,0.91);
+box-shadow: 4px 4px 2px 1px rgba(0,0,0,0.2) ;
+text-shadow: -1px -1px 0 rgba(15,73,168,0.66) ;
+}
+
+p{
+  color: orange;
+  text-decoration: underline;
+}
+
+.head{
+  font-size: 48px;
+}
+.hide{
+  display: none;
+}
+
+
+#google{
+
+  background-color:	#FF6347;
+  color: #fff;
+
+}
+
+.content{
+  position: relative;
+  padding: 20px;
+  overflow: hidden;
+  border: none;
+  border-radius: 11px;
+  color: rgba(255,255,255,1);
+  text-align: center;
+  height: 200px;
+  text-overflow: ellipsis;
+  background: rgba(44,140,178,1);
+  width:400px;
+  box-shadow: 14px 9px 1px 0 rgba(0,0,0,0.3) ;
+  text-shadow: 1px 1px 1px rgba(0,0,0,0.2) ;
+  position:relative;
+  top:50%;
+  left: 50%;
+  margin-top: 100px;
+  margin-left: -300px;
+  margin-bottom: 50px
+}
