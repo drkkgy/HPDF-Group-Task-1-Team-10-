@@ -4,13 +4,13 @@ Refferecen Hasura Docs v0.15 (Link:-https://docs.hasura.io/0.15/manual/getting-s
 
 Authetication (use by Web app only)
 ----------------------------------------------------
-https://auth.archetypal53.hasura-app.io/ui/?=XXXXXXXX -> Use this link to redirect the webapp to the login screen
+https://auth.brunet29.hasura-app.io/ui/?=XXXXXXXX -> Use this link to redirect the webapp to the login screen
 
 XXXXXXX = Url to your profile page which on sucess full login will redirect you to your home page 
 --------------------------------------------------------------------------------------------
 For signup (Use by both mobile and web
 ---------------------------------------------------------------------------------------
-https://api.archetypal53.hasura-app.io/register/A/B/C/D/E/F
+https://api.brunet29.hasura-app.io/register/A/B/C/D/E/F
 
 A - First name
 B - Second Name
@@ -25,7 +25,7 @@ You will recieve a call back in the form of a string (for sucess or failure)
 -------------------------------------------------------------------------------------
 for authenticationg to Mobile app
 
-https://api.archetypal53.hasura-app.io/mobile_login/A/B
+https://api.brunet29.hasura-app.io/mobile_login/A/B
 
 A - User Name here
 B - Password (min 8 char)
@@ -44,7 +44,7 @@ error
 -----------------------------------------------------------------------------------------------------
 For Custom push notification
 
-https://api.archetypal53.hasura-app.io/auth/Send_Notification/A/B/C
+https://api.brunet29.hasura-app.io/auth/Send_Notification/A/B/C
 
 A- Token of the device to which we will send the notification to
 B- Title of the notificaiton
@@ -60,6 +60,6 @@ on failure
 Something has gone wrong!
 
 --------------------------------------------------------------------------------------------------------
-https://api.archetypal53.hasura-app.io/Upload/A/
+https://api.brunet29.hasura-app.io/Upload/A/
 
 A - Filelocation on the local computer will be pushed here //Some dubt here will clarify
