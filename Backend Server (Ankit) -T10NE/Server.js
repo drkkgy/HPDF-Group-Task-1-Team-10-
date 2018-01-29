@@ -3,7 +3,7 @@ var session = require('express-session');
 var http = require('http');
 var bodyParser = require('body-parser');
 var morgan = require('morgan');
-var port  = 3000;//<----- Control the port no from here
+var port  = 8080;//<----- Control the port no from here
 var server = require('http').Server(app);// needed to deploy on server
 var fetchAction =  require('node-fetch');
 var randomInt = require('random-int');
@@ -18,7 +18,7 @@ global.n = 10 + randomInt(2 , 1000);
 
 // Postgress SQL acess linkd
 
-var url_data = "https://data.archetypal53.hasura-app.io/v1/query";
+var url_data = "https://data.dankness95.hasura-app.io/v1/query";
 
 var requestOptions = {
 	"method": "POST",
@@ -36,6 +36,7 @@ var H_id = {
     ]
 }; // for storing Hasura Id
 // Fire Base Setup
+/*
 // --------------------------------------------------------------------------------------------
 var admin = require('firebase-admin');
 var serviceAccount = require('./hasura-custom-notification-firebase-adminsdk-f4kqo-b6d8c6ce91.json');
@@ -48,13 +49,13 @@ admin.initializeApp({
 var serverKey = 'AAAAi2yKNEQ:APA91bHATD7JYj1Ja9XBGZY3V9y3Hgkk0azgm98y9ujRYcuu4kVyS1NQSSznpb_ZLQTXLUokWP0DkMrmfCMl1YHRU1isSiV5o8JHZXL9sCkeZmZ53j7GBOlFvR1BtJ4oF3qM5ZwqIOGq';
 var fcm = new FCM(serverKey);
 
-
+*/
 
 // ----------------------------------------------------------------
 
 // Hasura Signup Page
 
-var url_Signup = "https://auth.archetypal53.hasura-app.io/v1/signup";
+var url_Signup = "https://auth.dankness95.hasura-app.io/v1/signup";
 
 
 // backend api HomePage
@@ -139,7 +140,7 @@ console.log(H_id);
 });
 // ----------------------------------------------------------------------------------------------
 // Mobile customized authentication
-var url_custom_login = "https://auth.archetypal53.hasura-app.io/v1/login";
+var url_custom_login = "https://auth.dankness95.hasura-app.io/v1/login";
 
 
 app.get('/mobile_login/:Username?/:Password?', (req,res)=> {
@@ -182,7 +183,48 @@ fetchAction(url_custom_login, requestOptions)
 
  
 });
+//---------------------------------------------------------
+// Sending user info to the frontend for display
+app.get('/return_user_info/:uid?/' , (req,res) => {
 
+  var body_user_details_response = {
+    "type": "select",
+    "args": {
+        "table": "User_Details",
+        "columns": [
+            "F_Name",
+            "L_Name",
+            "User_Name",
+            "Email_Id",
+            "Phone_No"
+        ],
+        "where": {
+            "User_Name": {
+                "$eq": req.params.uid
+            }
+        }
+    }
+};
+
+requestOptions.body = JSON.stringify(body_user_details_response);
+
+fetchAction(url_data, requestOptions)
+.then(function(response) {
+  return response.json();
+})
+.then(function(result) {
+  res.json(result);
+  console.log(result);
+})
+.catch(function(error) {
+  console.log('Request Failed:' + error);
+  res.send("User does not exist")
+});
+
+
+});
+//-----------------------------------------------------------
+/*
 // -------------------------------------------------------------------------------------------------------
 // Notification Sending Module using Fire Base
 app.get('/auth/Send_Notification/:Token/:Title/:Notification_Message', (req,res) => {
@@ -208,13 +250,13 @@ fcm.send(message)
     });
 
 });
+*/
 // ---------------------------------------------------------------------------
 // Image upload url
-var url_Upload = "https://filestore.archetypal53.hasura-app.io/v1/file";
+var url_Upload = "https://filestore.dankness95.hasura-app.io/v1/file";
 app.get('/Upload/:File_location?/', (req,res)=> {
 //res.send('aaaaa');
-//var file = fs.readFile(res.params.File_location);
-var file  = Ankit_Yadav.jpg;
+var file = fs.readFile(res.params.File_location);
 var requestOptions_upload = {
 	method: 'POST',
 	headers: {

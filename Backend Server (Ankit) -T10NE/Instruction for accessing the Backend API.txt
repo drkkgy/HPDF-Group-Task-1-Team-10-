@@ -63,3 +63,12 @@ Something has gone wrong!
 https://api.brunet29.hasura-app.io/Upload/A/
 
 A - Filelocation on the local computer will be pushed here //Some dubt here will clarify
+
+-----------------------------------------------------------------------------------------------
+https://api.dankness95.hasura-app.io/return_user_info/A/
+
+A- User Name
+
+Enter the username to recieve the user data 
+
+response comes in json format
