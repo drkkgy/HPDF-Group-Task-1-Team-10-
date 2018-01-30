@@ -1,0 +1,7 @@
+- alias: hasura
+  config:
+    configmap: controller-conf
+    namespace: horsefly11-hasura
+  data: null
+  kubeContext: horsefly11
+  name: horsefly11
