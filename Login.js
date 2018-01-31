@@ -52,8 +52,11 @@ fetch(url, requestOptions)
                 <TextInput placeholder=" Password" secureTextEntry={true} placeholderTextColor="#000000" underlineColorAndroid='transparent' style={{height: 40, opacity: 0.5, borderColor: 'rgba(255,255,255,0.7)', marginTop: 8, backgroundColor: 'rgba(255,255,255,0.7)'}}/>
                 <TextInput placeholder=" Email" placeholderTextColor="#000000" underlineColorAndroid='transparent' keyboardType='email-address' style={{height: 40, opacity: 0.5, marginTop: 8, borderColor: 'rgba(255,255,255,0.7)', backgroundColor: 'rgba(255,255,255,0.7)'}}/>
                 <TextInput placeholder=" Mobile No." placeholderTextColor="#000000" underlineColorAndroid='transparent' keyboardType='numeric' style={{height: 40, opacity: 0.5, marginTop: 8, borderColor: 'rgba(255,255,255,0.7)', backgroundColor: 'rgba(255,255,255,0.7)'}}/>
-                <Button block round style={{backgroundColor: 'violet', marginTop: 5}} onPress={() => this._handleButtonPress} onclick={() => Action} >
+                <Button block style={{backgroundColor: 'violet', marginTop: 5}} onPress={() => this._handleButtonPress} onclick={() => Action} >
                 <Text style={{color: 'white'}}>Register</Text>
+                </Button>
+                <Button block style={{backgroundColor: 'blue', marginTop: 5}}>
+                <Text style={{color: 'white'}}>Cancel</Text>
                 </Button>
                </View>
         );
