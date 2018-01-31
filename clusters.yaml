@@ -1,0 +1,7 @@
+- alias: hasura
+  config:
+    configmap: controller-conf
+    namespace: casually17-hasura
+  data: null
+  kubeContext: casually17
+  name: casually17

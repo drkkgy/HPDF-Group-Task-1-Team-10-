@@ -1,171 +1,485 @@
-# Hello React Native
+# Hasura Hello World
 
-## What does this come with?
+This quickstart will take you over Hasura's instant backend APIs (BaaS) and how to deploy your custom code too.
+Once you go through this README, you'll be able to configure and use the Hasura APIs for your apps and you'll also
+know how to deploy your own code.
 
-This is a fully working react-native app with a [Hasura](https://hasura.io) backend. You can clone it and modify as per your requirements. It has basic BaaS features implemented. Also, it uses [NativeBase](https://nativebase.io) for better UI.
+## Basic Hasura concepts
 
-- When you clone this quickstart project, there are two tables (article and author) in your database populated with some data.
+There are 3 core concepts that drive everything you do with Hasura. 1) Hasura projects, 2) Hasura clusters and 3) deploying your project to the cluster. The [hasura CLI](https://docs.hasura.io/0.15/manual/install-hasura-cli.html) tool is required to run manage everything Hasura.
 
-```:bash
-Note: This is just to get you familiar with the system. You can delete these tables whenever you like.
-```
+![core-hasura-concepts](https://docs.hasura.io/0.15/_images/core-hasura-concepts.png)
 
-- There is a login screen in this app where the authentication is managed by the Hasura Auth APIs.
-- Then we make data API calls to get the list of articles and their authors.
-- The functions that make these calls are in the `react-native/src/hasuraApi.js` file. Modify it as you like and the changes will reflect in the app.
+### Concept #1: A hasura project
 
-## How to get it running?
+A hasura project is a folder on your filesystem that contains all the source code and configuration for your application.
+A hasura project has a particular structure and the best way to create a hasura project is by cloning one from hasura.io/hub.
 
-### Reqirements
+A Hasura project contains:
 
-In order to get this app running, you must have the following:
-1. [hasura CLI tool](https://docs.hasura.io/0.15/manual/install-hasura-cli.html) (hasura).
+1. Configuration files for Hasura's ready-made microservices:
+   - eg: the minimum password length for Hasura's instant auth APIs
+   - eg: domains that you want to point to your application
+2. Migration files that capture your data modelling:
+   - Tables and relationships you create give you instant data APIs
+   - These files capture your data modelling and changes you make to your models
+3. Source files for your custom code:
+   - eg: a custom API you wrote that does cool ML-and-the-AI things,
+   - eg: a custom webapp that servers a UI
 
-2. Expo client (XDE). Download from https://expo.io/tools
+### Concept #2: A hasura cluster
 
-3. NodeJS
+A Hasura cluster is a cluster of nodes (VMs) on the cloud that can host any Hasura project. It has all the Hasura microservices running and the necessary tooling for you to deploy your Hasura project.
+Every Hasura cluster comes with a name and a domain attached to it as well. Eg: `awesome45.hasura-app.io`.
 
-(For more such apps, check out https://hasura.io/hub)
+### Concept #3: Deploying to the hasura cluster
 
-### Pushing the project to the cluster
+Once you 'add' a Hasura cluster to your Hasura project, running a ``git push hasura master`` will
+deploy your Hasura project to the cluster.
+Your configurations, database schema, and your microservices will get deployed in a single go.
 
-- To get cluster information, run `hasura cluster status`. Info will be of the following form.
 
-```
-INFO Reading cluster status...
-INFO Status:
-Cluster Name:       athlete80
-Cluster Alias:      hasura
-Kube Context:       athlete80
-Platform Version:   v0.15.3
-Cluster State:      Synced
-```
+## Clone & deploy
 
-- Set the cluster name in your project by modifying `react-native -> src -> hasuraApi.js`
+Any project on hasura.io/hub can be cloned and deployed. In fact, this hello-world is a hasura project itself.
 
-```:javascript
-const clusterName = athlete80;
-```
+**Step 1:** Install the hasura CLI: [installation instructions](https://docs.hasura.io/0.15/manual/install-hasura-cli.html)
 
-- Install the required node modules. Run the following command from the project directory.
+**Step 2:** Create a hasura project on your machine
 
 ```
-$ cd react-native && npm install
+$ # 1) Run the quickstart command
+$ hasura quickstart hasura/hello-world
 ```
 
-- Run the following commands from the project directory to push it to your Hasura cluster.
+**Step 3:** Deploy the project to your free cluster!
+
 ```
-$ git add .
-$ git commit -m "Commit message"
+$ # 2) Git add, commit & push to deploy to your cluster
+$ cd hello-world
+$ git add . && git commit -m 'First commit'
 $ git push hasura master
 ```
-**The app is now ready to use!!**
 
-### Opening the app
+**Note**: Your free cluster got automatically created when you ran the `quickstart` command.
 
-- Open Expo XDE, do a login/signup and click on `Open existing project...`. Browse to the hello-react-native directory and open the react-native folder.
-- Once the project loads, click on Share.
-- Scan the QR code using the Expo app from your phone (Install from Playstore/Appstore)
-- Fully working app will open on your phone
+### What got 'deployed'?
+
+This hello-world project contains a sample data schema and some sample data (files in `migrations`) and a simple microservice in nodejs (`microservices/www`). When you ran the `git push` these tables and a microservice and even a subdomain to access your microservice all
+got created.
+
+In the next few steps you'll be browsing the instant Hasura APIs and exploring the custom microservice too.
+
+### Using the API console
+
+The hasura CLI gives you a web UI to manage your data modelling, manage your app users and explore the Hasura APIs.
+The API explorer gives you a collection of all the Hasura APIs and lets you test them easily.
+
+Access the **api-console** via the following command:
 
 ```
-Note: You can open the app with any of your desired react-native simulators. We prefer Expo because of its simple onboarding for beginners.
+$ hasura api-console
 ```
 
-(*Shoutout to [NativeBase](https://nativebase.io) for their excellent UI components.*)
+This will open up Console UI on the browser. You can access it at [http://localhost:9695](http://localhost:9695)
+
+## Data APIs
+
+The Hasura Data API provides a ready-to-use HTTP/JSON API backed by a PostgreSQL database.
+
+These APIs are designed to be used by any client capable of making HTTP requests, especially
+and are carefully optimized for performance.
+
+The Data API provides the following features:
+* CRUD APIs on PostgreSQL tables with a MongoDB-esque JSON query syntax.
+* Rich query syntax that supports complex queries using relationships.
+* Role based access control to handle permissions at a row and column level.
+
+ The url to be used to make these queries is always of the type: `https://data.cluster-name.hasura-app.io/v1/query` (in this case `https://data.h34-excise98-stg.hasura-app.io`)
+
+As mentioned earlier, this quickstart app comes with two pre-created tables `author` and `article`.
+
+#### author
+
+column | type
+--- | ---
+id | integer NOT NULL *primary key*
+name | text NOT NULL
+
+#### article
+
+column | type
+--- | ---
+id | serial NOT NULL *primary key*
+title | text NOT NULL
+content | text NOT NULL
+rating | numeric NOT NULL
+author_id | integer NOT NULL
 
 
-## How to include a database?
+Alternatively, you can also view the schema for these tables on the api console by heading over to the tab named `data`.
 
-- Hasura provides instant data APIs over Postgres to make powerful data queries. For example, to select "id" and "title" of all rows from the article table, make this query to `https://data.<cluster-name>.hasura-app.io/v1/query/`
+You can just paste the queries shown below into the json textbox in the API explorer and hit send to test them out.
+(The following is a short set of examples to show the power of the Hasura Data APIs, check out our [documentation](https://docs.hasura.io/) for more when you're done here!)
 
-```:json
+Let's look at some sample queries to explore the Data APIs:
+
+### CRUD
+Simple CRUD Operations are supported via an intuitive JSON query language.
+
+* Select all entries in the article table, ordered by rating:
+```json
 {
-    "type":"select",
-    "args":{
-        "table":"article",
-        "columns":[
-            "title",
-            "id"
-        ],
-        "where":{
-            "author_id":4
+    "type": "select",
+    "args": {
+        "table": "article",
+        "columns": ["*"],
+        "order_by": [
+            {
+                "column": "rating"
+            }
+        ]
+    }
+}
+```
+
+* Update a particular entry in the author table:
+```json
+{
+    "type": "update",
+    "args": {
+        "table": "author",
+        "where": {
+            "name": {
+                "$eq": "Adams"
+            }
         }
     }
 }
 ```
 
-- This app uses the above query and renders the list of articles as shown below.
-
-![List of articles](https://github.com/hasura/hello-react-native/raw/master/readme-assets/list.png)
-
-- You can also exploit relationships. In the pre-populated schema, the author table has a relationship to the article table. The app uses the following query to render the article page.
-```:json
+* The where clause on the Data API is a very expressive boolean expression, and can be arbitrarily complex. For example:
+```json
 {
-    "type":"select",
-    "args":{
-        "table":"article",
-        "columns":[
-            "title",
-            "content"
-            "id",
+    "type": "select",
+    "args": {
+        "table": "article",
+        "columns": [
+            "content",
+            "rating"
+        ],
+        "where": {
+            "$and": [
+                {
+                    "$or": [
+                        {
+                            "author_id": {
+                                "$eq": "7"
+                            }
+                        },
+                        {
+                            "title": {
+                                "$like": "Editorial%"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "rating": {
+                        "$gte": "3"
+                    }
+                }
+            ]
+        },
+        "order_by": [
             {
-                "name": "author",
-                "columns":[
-                    "name",
-                    "id"
+                "column": "rating",
+                "order": "asc"
+            }
+        ]
+    }
+}
+```
+
+  This query will select all the articles with ratings above 3, which were either written by an author with author_id 7 or, which have a title starting with "Editorial". This can be used to construct complex queries that feel very intuitive.
+
+* Pagination on queries is supported through limit and offset parameters:
+```json
+{
+    "type": "select",
+    "args": {
+        "table": "article",
+        "columns": ["*"],
+        "limit": "10",
+        "offset": "20"
+    }
+}
+```
+
+* Raw SQL:  The APIs support running arbitrary SQL queries through a run_sql type key.
+
+This can be used to perform queries directly on the postgres db:
+```json
+{
+    "type" : "run_sql",
+    "args" : {
+        "sql" : "CREATE TABLE category (
+                     id SERIAL NOT NULL PRIMARY KEY,
+                     name TEXT NOT NULL
+                 );"
+    }
+}
+```
+
+### Relationships
+
+Modelling data in an RDBMS involves establishing connections between various tables through foreign key constraints. These can be used to build more complex relationships, which can be used to fetch related data alongside the columns queried, as pseudo columns.
+
+In the standard article-author sample schema, the relationships we can define are:
+1. Articles have an object/many-to-one relationship with authors
+2. Authors have an array/one-to-many relationship with articles.
+
+We can define these relationships on the database, and use them to get related data by expanding the relationships in the columns array:
+```json
+{
+    "type": "select",
+    "args": {
+        "table": "author",
+        "columns": [
+            "name",
+            {
+                "name": "articles",
+                "columns": [
+                    "content",
+                    "title",
+                    "rating"
                 ]
             }
+        ]
+    }
+}
+```
+
+This query will add an array of article objects alongside the name of the author.
+
+You can also use the standard where/order_by/offset/limit conditions on the article objects:
+```json
+{
+    "type": "select",
+    "args": {
+        "table": "author",
+        "columns": [
+            "name",
+            {
+                "name": "articles",
+                "columns": [
+                    "content",
+                    "title",
+                    "rating"
+                ],
+                "where": {
+                    "rating": {
+                        "$gte": "3"
+                    }
+                },
+                "order_by": [{
+                    "column": "rating",
+                    "order": "desc"
+                }]
+            }
         ],
-        "where":{
-            "author_id":4
+        "where": {
+            "name": {
+                "$like": "A%"
+            }
         }
     }
 }
 ```
-![List of articles](https://github.com/hasura/hello-react-native/raw/master/readme-assets/article.png)
 
-- The Hasura API Console is a UI which makes managing the backend easier. To access your api-console, run
+This will get us a list of all articles with rating greater than 3 by authors with names starting with A, ordered by rating among articles by the same author.
 
-```
-$ hasura api-console
-```
+All this and more can be done with a single query!
 
-- You can build queries easily using the query builder on API-Console.
+### Aggregations
 
-![QueryBuilder](https://media.giphy.com/media/3oFzmaJy6xGNehrGUg/giphy.gif)
+The JSON based query language is designed to be simple yet powerful. That said, there will be queries that cannot be expressed through the select query, like getting the number of ratings given for each article, if you have the ratings by user data stored in another table.
 
-- Also, there are ready made code snippets generated for the query that you build with the query builder. You can instantly copy and paste them in your code.
-
-![CodeGen](https://media.giphy.com/media/3o7524EoojncABE5Ve/giphy.gif)
-
-## How to add authentication?
-
-- Every app almost always requires some form of authentication. Hasura gives you a flexibility to implement almost every popular login mechanism (mobile, email, facebook, google etc) in your app.
-- In this application, we are using just the normal username password login. You can implement whichever login you need. The auth screen looks like this.
-
-![List of articles](https://github.com/hasura/hello-react-native/raw/master/readme-assets/auth.png)
-
-- You can try out all the auth APIs in the API console. Check out.
-
-```
-$ hasura api-console
+To express complex queries like aggregations, window functions, custom joins etc, you can directly use SQL.
+```json
+{
+  "type" : "run_sql",
+  "args" : {
+    "sql" : "CREATE VIEW article_rating_count AS...",
+  }
+}
 ```
 
-## How to migrate from an existing project?
+If you can define a view with your query in SQL, you can then track it with the Data APIs, and use the JSON query language to access it.
+```json
+{
+  "type" : "add_existing_table_or_view",
+  "args" : {
+    "name" : "article_rating_count"
+  }
+}
+```
 
-- Replace react-native directory with your pre-existing react-native project directory.
-- run `npm install` from this new directory
-- Make changes in your backend with API-Console
-- App is ready
+  Note that views are read only, so you can only perform select queries on them. You can also manually define object relationships on views, in order to easily obtain them from select queries on other tables.
 
-## How to use a custom API/server?
+### Role based access control
 
-- Sometimes you might need to add new microservices/APIs as per your requirements. In such cases, you can deploy your microservices with Hasura using git push or docker.
-- This quickstart comes with one such custom microservice written in nodejs using the express framework. Check it out in action at `https://api.<cluster-name>.hasura-app.io`. Currently, it just returns a "Hello-React" at that endpoint.
-- This microservice is in the microservices folder of the project directory. You can add your custom microservice there.
-- To generate your own custom microservice, run
+Permissions on the Data APIs are designed to restrict the operations that can be performed on the database by various users/roles. The Data APIs support setting permissions on various CRUD operations at a row/column granularity.  By default, the admin role has access to all operations.
+
+This is accomplished through the session middleware that Hasura provides. This session middleware provides the Data API with the role and user id of the current user with every request, and this lets the Data service apply the permissions as appropriate.
+
+* The permissions can be based on a user id check from the information provided by the session middleware:
+```json
+{
+    "type" : "create_insert_permission",
+    "args" : {
+        "table" : "article",
+        "role" : "user",
+        "permission" : {
+            "check" : {
+                "author_id" : "REQ_USER_ID"
+            }
+        }
+    }
+}
+```
+
+  This query will set select permissions on the article table for the user role so that users will be able only insert entries into the article table with author_ids matching their user ids. This means that the database will not permit a user to write an article in another user's name.
+  This sort of a constraint is a property of the data, and therefore should be accomplished in the database, and the permission layer provides the perfect tools for the job.
+  Apart from create_insert_permissions, the Data API also provides other types of queries to create select/update and delete permissions. This way, permissions can be set on all CRUD operations.
+
+* The permission object in the json query uses syntax very similar to a where clause in the select query, making it extremely expressive,  as shown here:
+```json
+{
+    "type" : "create_update_permission",
+    "args" : {
+        "table" : "article",
+        "role" : "user",
+        "permission" : {
+            "check" : {
+                "author_id" : "REQ_USER_ID",
+                "$or" : [
+                    {
+                        "category" : "editorial",
+                        "is_reviewed" : false
+                    },
+                    {
+                        "category" : { "$neq" : "editorial"}
+                    }
+                ]
+            }
+        }
+    }
+}
+```
+
+This query sets insert permissions on the article table for the user role so that users can only insert entries into the table if the author_id is the same as their user id, and if is_reviewed is false when the category is editorial.
+
+* This permissions setup can be further improved by creating custom roles. For example, the above schema can be improved by having an author role that can be given permissions to edit only the article table, and nothing else.
+
+This is very useful for a more complex schema, say a forum, with several types of users like admins, moderators, thread owners, and normal users.
+
+## Auth APIs
+
+Every app almost always requires some form of authentication. This is useful to identify a user and provide some sort of personalised experience to the user. Hasura provides various types of authentication (username/password, mobile/otp, email/password, Google, Facebook etc).
+
+You can try out these in the `API EXPLORER` tab of the `api console`. To learn more, check out our [docs](https://docs.hasura.io/0.15/manual/users/index.html)
+
+### Add instant authentication via Hasura’s web UI kit
+
+Every project comes with an Authentication kit, you can restrict the access to your app to specific user roles.
+It comes with a UI for Signup and Login pages out of the box, which takes care of user registration and signing in.
+
+![Auth UI](https://docs.hasura.io/0.15/_images/uikit-dark.png)
+
+Follow the [Authorization docs](https://docs.hasura.io/0.15/manual/users/uikit.html) to add Authentication kit to your app.
+
+## File APIs
+
+Sometimes, you would want to upload some files to the cloud. This can range from a profile pic for your user or images for things listed on your app. You can securely add, remove, manage, update files such as pictures, videos, documents using the Hasura filestore.
+
+This is done via simple POST, GET and DELETE requests on a single endpoint.
+
+Just like the Data service, the File API supports Role based access control to the files, along with custom authorization hooks. (Check out our [ documentation ](https://docs.hasura.io/) for more!)
+
+### Uploading files
+
+Uploading a file requires you to generate a file_id and make a post request with the content of the file in the request body and the correct mime type as the content-type header.
+
+```http
+POST https://filestore.cluster-name.hasura-app.io/v1/file/05c40f1e-cdaf-4e29-8976-38c899 HTTP/1.1
+Content-Type: image/png
+Authorization: Bearer <token>
+
+<content-of-file-as-body>
+```
+
+This is a very simple to use system, and lets you directly add an Upload button on your frontend, without spending time setting up the backend.
+
+### Downloading files
+Downloading a file requires the unique file id that was used to upload it. This can be stored in the database and retrieved for download.
+
+To download a particular file, what is required is a simple GET query.
+```http
+GET https://filestore.cluster-name.hasura-app.io/v1/file/05c40f1e-cdaf-4e29-8976-38c899 HTTP/1.1
+Authorization: Bearer <token>
+```
+
+### Permissions
+By default, the File API provides three hooks to choose from
+
+  1. Private: Only logged in users can upload/download.
+  2. Public: Anyone can download, but only logged in users can upload.
+  3. Read Only: Anyone can download, but no one can upload.
+
+You can also set up your own authorization webhook!
+(Check out our [ documentation ](https://docs.hasura.io/) for more!)
+
+## Notify APIs
+
+Check out the [ Learning center ](http://localhost:9695/learning-center) tab on the API Console for short tutorials on all the APIs!
+
+## Add your own custom microservice
+
+### Docker microservice
 
 ```
-$ hasura microservice generate --help
+$ hasura microservice create <service-name> -i <docker-image> -p <port>
+```
+
+### git push microservice
+
+```bash
+$ hasura microservice create <service-name>
+```
+
+Once you have added a new service, you need to add a route to access the service.
+
+### Add route for the service created.
+
+```bash
+$ hasura conf generate-route <service-name> >> conf/routes.yaml
+```
+
+It will generate the route configuration for the service and append it to `conf/routes.yaml`.
+
+### Add a remote for the service [Only for git push based services]
+
+```bash
+$ hasura conf generate-remote <service-name> >> conf/ci.yaml
+```
+
+This will append the remotes configuration to the conf/ci.yaml file under the {{ cluster.name }} key.
+
+### Apply your changes
+
+```
+$ git add .
+$ git commit -m "Added a new service"
+$ git push hasura master
 ```
