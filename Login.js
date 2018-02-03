@@ -41,8 +41,8 @@ fetch(url, requestOptions)
 .then(function(result) {
 	console.log(result);
 	// To save the auth token received to offline storage
-	var authToken = result.auth_token
-	AsyncStorage.setItem('HASURA_AUTH_TOKEN', authToken);
+	//var authToken = result.auth_token
+	//AsyncStorage.setItem('HASURA_AUTH_TOKEN', authToken);
 })
 .catch(function(error) {
 	console.log('Request Failed:' + error);

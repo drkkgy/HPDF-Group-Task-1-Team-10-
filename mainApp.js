@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { View, TextInput, Image } from 'react-native';
 import { Container, Header, Title, Content, Form, Input, Item, Button, Text } from 'native-base';
+import Expo from 'expo';
 import {Actions} from 'react-native-router-flux';
 
 export default class Main extends Component {
@@ -29,8 +30,8 @@ export default class Main extends Component {
         .then(function(result) {
             console.log(result);
             // To save the auth token received to offline storage
-            var authToken = result.auth_token
-            AsyncStorage.setItem('HASURA_AUTH_TOKEN', authToken);
+            //var authToken = result.auth_token
+            //AsyncStorage.setItem('HASURA_AUTH_TOKEN', authToken);
         })
         .catch(function(error) {
             console.log('Request Failed:' + error);

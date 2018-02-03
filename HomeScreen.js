@@ -52,8 +52,8 @@ async componentWillMount() {
     .then(function(result) {
         console.log(result);
         // To save the auth token received to offline storage
-        var authToken = result.auth_token
-        AsyncStorage.setItem('HASURA_AUTH_TOKEN', authToken);
+        //var authToken = result.auth_token
+        //AsyncStorage.setItem('HASURA_AUTH_TOKEN', authToken);
     })
     .catch(function(error) {
         console.log('Request Failed:' + error);
@@ -76,11 +76,10 @@ async componentWillMount() {
         <Image source={{uri: 'http://canacopegdl.com/images/notify/notify-18.jpg'}} style={{height: 180, width: 180, marginLeft: 80, marginBottom: 60, marginTop: -70}}/>
          <TextInput value={this.state.username} onChangeText={text => this.setState({ username: text })} placeholder=" Username/Email/Mobile No." placeholderTextColor="#000000" underlineColorAndroid='transparent' style={{height: 40, opacity: 0.5, borderColor: 'rgba(255,255,255,0.7)', backgroundColor: 'rgba(255,255,255,0.7)'}}/>
          <TextInput value={this.state.password} onChangeText={text => this.setState({ password: text })} placeholder=" Password" secureTextEntry={true} placeholderTextColor="#000000" underlineColorAndroid='transparent' style={{height: 40, opacity: 0.5, borderColor: 'rgba(255,255,255,0.7)', marginTop: 15, backgroundColor: 'rgba(255,255,255,0.7)'}}/>
-         <Button block round style={{backgroundColor: 'orange', marginTop: 10}}
-         onPress={this._handleButtonPressLogin.bind(this)} onclick={Actions.main}>
+         <Button block round style={{backgroundColor: 'orange', marginTop: 10}} onPress={this.onLoginSuccessfull.bind(this)}>
          <Text style={{color: 'white'}}>Login</Text>
          </Button>
-         <Button block round style={{backgroundColor: 'violet', marginTop: 5}} onPress={()=> Actions.Login()}>
+         <Button block round style={{backgroundColor: 'violet', marginTop: 5}} onPress={() => Actions.Login()}>
          <Text style={{color: 'white'}}>Register</Text>
          </Button>
          <Text style={{color: 'white', marginLeft: 100, marginTop: 10}}>Forgot  password ?</Text>
