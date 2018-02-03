@@ -14,7 +14,7 @@ return (
          <Scene key="root" hideNavBar>
          <Scene key="auth">
          <Scene key="HomeScreen" component={HomeScreen} hideNavBar initial />
-         <Scene key="Login" component={Login} title="Login" />
+         <Scene key="Login" component={Login} hideNavBar />
          </Scene>
          <Scene key="main">
          <Scene key="MainApp" component={MainApp} hideNavBar />

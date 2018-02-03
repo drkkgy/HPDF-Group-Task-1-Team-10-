@@ -8,6 +8,21 @@ import {Actions} from 'react-native-router-flux';
 
 export default class Home extends Component {
 
+    constructor() {
+        super();
+        this.state = {
+        isReady: false
+        };
+        }                
+async componentWillMount() {
+        await Expo.Font.loadAsync({
+        Roboto: require("native-base/Fonts/Roboto.ttf"),
+        Roboto_medium: require("native-base/Fonts/Roboto_medium.ttf"),
+        Ionicons: require("@expo/vector-icons/fonts/Ionicons.ttf")
+        });
+        this.setState({ isReady: true });
+        }
+
     state={ username: '', password: '' };
 
   _handleButtonPressLogin = () => {
@@ -51,6 +66,11 @@ export default class Home extends Component {
     }
 
     render(){
+
+        if (!this.state.isReady) {
+            return <Expo.AppLoading />;
+            }
+            
       return (
         <View style={{backgroundColor:"#3498db", flex:  1, padding: 20, justifyContent: 'center'}}>
         <Image source={{uri: 'http://canacopegdl.com/images/notify/notify-18.jpg'}} style={{height: 180, width: 180, marginLeft: 80, marginBottom: 60, marginTop: -70}}/>
