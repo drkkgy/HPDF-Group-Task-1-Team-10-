@@ -2,7 +2,7 @@
   "expo": {
     "sdkVersion": "23.0.0",
     "splash": {
-      "image": "./notify.png",
+      "image": "https://pbs.twimg.com/profile_images/561915970063568896/rh-YHuoW.png",
       "backgroundColor": "#2196F3",
       "resizeMode": "stretch"
     }  
