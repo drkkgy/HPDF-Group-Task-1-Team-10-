@@ -8,7 +8,7 @@ Login Screen:
 The login screen mainly contains Username and Password based design which will login the (pre-registered)user.
 It also has Register button which will go to the registration page and let the user register to the app.
 
-![alt text](Login.png "Login Screen")
+
 
 Register Screen:
 The register screen contains the fields to be registered i.e. Firstname, Lastname, username, password, etc.
