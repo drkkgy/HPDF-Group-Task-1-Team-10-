@@ -23,7 +23,8 @@ It has the fields to enter the username and the message body to be push notified
 and the receiver and then push notifies the receiver.
 It also has a logout button which logs out the user from the app and gets back to Login Screen.
 
-<html><body><p><image src='Mainapp.png'></image></p></body></html>
+![mainapp](https://user-images.githubusercontent.com/34096221/35780712-95cb3a20-0a05-11e8-9385-d5f280cb31ad.png)
+
 
 About The APP
 This is a Custom push notification app which allows you to login into your account and then send custom notification to other users who are 
