@@ -1,10 +1,66 @@
 import React, { Component } from 'react';
 import { View, TextInput, Image } from 'react-native';
 import { Container, Header, Title, Content, Form, Input, Item, Button, Text } from 'native-base';
-import Expo from 'expo';
+import Expo, { Permissions, Notifications } from 'expo';
 import {Actions} from 'react-native-router-flux';
+import * as firebase from 'firebase';
 
 export default class Main extends Component {
+
+    state = {userID: "", message: ""};
+
+    _onSendButtonPress = () => {
+
+        var url = "https://api.dankness95.hasura-app.io/auth/Send_Notification/A/B/C";
+
+// If you have the auth token saved in offline storage, obtain it in async componentDidMount
+// var authToken = await AsyncStorage.getItem('HASURA_AUTH_TOKEN');
+// And use it in your headers
+// headers = { "Authorization" : "Bearer " + authToken }
+var requestOptions = {
+    "method": "POST",
+    "headers": {
+        "Content-Type": "application/json",
+    }
+};
+
+var body = {
+    "to": this.state.userID,
+    "title": "",
+    "message": this.state.message
+};
+
+requestOptions.body = JSON.stringify(body);
+
+fetch(url, requestOptions)
+.then(function(response) {
+	return response.json();
+})
+.then(function(result) {
+	console.log(result);
+})
+.catch(function(error) {
+	console.log('Request Failed:' + error);
+});
+
+        var config = {
+            apiKey: "AIzaSyDcFCf97JEsGNmkrcRwWpH6QEh_2Vx7YpA",
+            authDomain: "hasura-custom-notification.firebaseapp.com",
+            databaseURL: "https://hasura-custom-notification.firebaseio.com",
+            projectId: "hasura-custom-notification",
+            storageBucket: "hasura-custom-notification.appspot.com",
+            messagingSenderId: "598821450820"
+          };
+          firebase.initializeApp(config);
+
+    const {status} = Permissions.askAsync(Permissions.NOTIFICATIONS);
+    if (status!= 'granted') {
+      return;
+    }
+    let token = Notifications.getExpoPushTokenAsync();
+    userID = firebase.auth().currentUser.uid;
+    firebase.database().ref('/users/'+userID).set( {token: token}); 
+    }
 
     componentDidMount() {
          
@@ -24,7 +80,7 @@ export default class Main extends Component {
         requestOptions.body = JSON.stringify(body);
         
         fetch(url, requestOptions)
-        .then(function(response) {
+        .then(async function (response) {
             return response.json();
         })
         .then(function(result) {
@@ -44,7 +100,7 @@ export default class Main extends Component {
             <Image source={{uri: 'http://canacopegdl.com/images/notify/notify-18.jpg'}} style={{height: 110, width: 110, marginLeft: 110}}/>
                 <Item textinput style={{marginTop: 20}}><Input placeholder="Username to notify" placeholderTextColor="#000000" style={{backgroundColor: '#80D8FF'}} /></Item>
                    <TextInput underlineColorAndroid='transparent' multiline={true} numberOfLines={4} placeholder=" Message" placeholderPosition='top' style={{ marginTop: 15, backgroundColor: 'white'}}/>
-                   <Button block style={{backgroundColor: 'red', marginTop: 5}}>
+                   <Button block style={{backgroundColor: 'red', marginTop: 5}} onPress={this._onSendButtonPress()} >
                 <Text style={{color: 'white'}}>Send</Text>
                 </Button>
                 <Button block style={{backgroundColor: '#3F51B5', marginTop: 5}} onPress={() => Actions.HomeScreen()} >
