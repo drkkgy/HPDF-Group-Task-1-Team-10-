@@ -7,6 +7,7 @@ Authetication (use by Web app only)
 https://auth.brunet29.hasura-app.io/ui/?=XXXXXXXX -> Use this link to redirect the webapp to the login screen
 
 XXXXXXX = Url to your profile page which on sucess full login will redirect you to your home page 
+https://auth.brunet29.hasura-app.io/ui/?=https://xyz.com
 --------------------------------------------------------------------------------------------
 For signup (Use by both mobile and web
 ---------------------------------------------------------------------------------------
