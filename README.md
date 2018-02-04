@@ -1,4 +1,28 @@
 # HPDF-Group-Task-1-Team-10-
+(React Native)
+Introduction to Notify!
+
+The main motive of this app is to notify(simply push message) someone(registered with app) by using beautiful features and design.
+The app functions like:
+Login Screen:
+The login screen mainly contains Username and Password based design which will login the (pre-registered)user.
+It also has Register button which will go to the registration page and let the user register to the app.
+
+<html><body><p><image src='Login.png'></image></p></body></html>
+
+Register Screen:
+The register screen contains the fields to be registered i.e. Firstname, Lastname, username, password, etc.
+It has two buttons, either to Register(will register the user) or to Cancel(back to Login Screen).
+
+<html><body><p><image src='Register.png'></image></p></body></html>
+
+Main App Screen:
+It has the fields to enter the username and the message body to be push notified. It then does the verification of ID of the sender
+and the receiver and then push notifies the receiver.
+It also has a logout button which logs out the user from the app and gets back to Login Screen.
+
+<html><body><p><image src='Mainapp.png'></image></p></body></html>
+
 About The APP
 This is a Custom push notification app which allows you to login into your account and then send custom notification to other users who are 
 the members of the system.
