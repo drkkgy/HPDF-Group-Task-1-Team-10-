@@ -15,7 +15,8 @@ Register Screen:
 The register screen contains the fields to be registered i.e. Firstname, Lastname, username, password, etc.
 It has two buttons, either to Register(will register the user) or to Cancel(back to Login Screen).
 
-<html><body><p><image src='Register.png'></image></p></body></html>
+![register](https://user-images.githubusercontent.com/34096221/35780690-5eff970c-0a05-11e8-8014-b548986f68d8.png)
+
 
 Main App Screen:
 It has the fields to enter the username and the message body to be push notified. It then does the verification of ID of the sender
