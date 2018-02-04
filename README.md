@@ -8,6 +8,7 @@ Login Screen:
 The login screen mainly contains Username and Password based design which will login the (pre-registered)user.
 It also has Register button which will go to the registration page and let the user register to the app.
 
+![login](https://user-images.githubusercontent.com/34096221/35780681-2db60f96-0a05-11e8-8846-800e0ee1d472.png)
 
 
 Register Screen:
