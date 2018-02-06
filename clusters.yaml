@@ -1,7 +1,0 @@
-- alias: hasura
-  config:
-    configmap: controller-conf
-    namespace: abnormality64-hasura
-  data: null
-  kubeContext: abnormality64
-  name: abnormality64
