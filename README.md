@@ -1,6 +1,6 @@
 ## HPDF-Group-Task-1-Team-10-
 (React Native)
-<b>Note: The react native code is in ReactNative branch of same github repository.</b>
+<b>Note: The react native code is in <i>ReactNative branch</i> of same github repository.</b>
 
 Introduction to Notify!
 
