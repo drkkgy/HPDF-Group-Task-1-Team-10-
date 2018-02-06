@@ -4,10 +4,14 @@ import { Container, Header, Item, Label, Input, Left, Button, TouchableOpacity, 
 import { StackNavigator } from 'react-navigation';
 import {Actions} from 'react-native-router-flux';
 
+const fields = () => {
+    if (this.state.firstname || this.state.lastname || this.state.username || this.state.password || this.state.email || this.state.mobile == undefined)
+    alert('Please Fill All Fields');    
+}
+
 export default class LoginScreen extends Component {
 
     state={ firstname: '', lastname: '', username: '', password: '', email: '', mobile: ''};
-
   _handleButtonPress = () => {
     var url = "https://api.dankness95.hasura-app.io/register/Vaibhav/Kulkarni/vaibhavk98/12345678/kulkarniva98@gmail.com/9920463898";
 
@@ -61,7 +65,7 @@ fetch(url, requestOptions)
                 <TextInput value={this.state.password} onChangeText={text => this.setState({ password: text })} placeholder=" Password" secureTextEntry={true} placeholderTextColor="#000000" underlineColorAndroid='transparent' style={{height: 40, opacity: 0.5, borderColor: 'rgba(255,255,255,0.7)', marginTop: 8, backgroundColor: 'rgba(255,255,255,0.7)'}}/>
                 <TextInput value={this.state.email} onChangeText={text => this.setState({ email: text })} placeholder=" Email" placeholderTextColor="#000000" underlineColorAndroid='transparent' keyboardType='email-address' style={{height: 40, opacity: 0.5, marginTop: 8, borderColor: 'rgba(255,255,255,0.7)', backgroundColor: 'rgba(255,255,255,0.7)'}}/>
                 <TextInput value={this.state.mobile} onChangeText={text => this.setState({ mobile: text })} placeholder=" Mobile No." placeholderTextColor="#000000" underlineColorAndroid='transparent' keyboardType='numeric' style={{height: 40, opacity: 0.5, marginTop: 8, borderColor: 'rgba(255,255,255,0.7)', backgroundColor: 'rgba(255,255,255,0.7)'}}/>
-                <Button block style={{backgroundColor: 'violet', marginTop: 5}} onPress={() => this._handleButtonPress.bind(this)}>
+                <Button block style={{backgroundColor: 'violet', marginTop: 5}} onPress={() => this._handleButtonPress.bind(this)} onclick={() => fields()} >
                 <Text style={{color: 'white'}}>Register</Text>
                 </Button>
                 <Button block style={{backgroundColor: 'blue', marginTop: 5}} onPress={() => Actions.HomeScreen()}>

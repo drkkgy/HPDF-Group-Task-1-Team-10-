@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, TextInput, NavigatorIOS, Image, props } from 'react-native';
+import { StyleSheet, View, TextInput, NavigatorIOS, Image, props, status } from 'react-native';
 import { Container, Header, Item, Label, Input, Left, Button, TouchableOpacity, Text } from 'native-base';
 import { StackNavigator } from 'react-navigation';
 import Expo from 'expo';
@@ -48,6 +48,7 @@ async componentWillMount() {
     fetch(url, requestOptions)
     .then(
     this.onLoginSuccessfull.bind(this)
+    
 )
     .then(function(result) {
         console.log(result);
@@ -62,6 +63,8 @@ async componentWillMount() {
 
     onLoginSuccessfull()
     {
+        if (console.log(status=='200'))
+          return;
         Actions.main();
     }
 

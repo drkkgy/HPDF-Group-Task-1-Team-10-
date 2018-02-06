@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, TextInput, Image } from 'react-native';
+import { View, TextInput, Image, AsyncStorage, status } from 'react-native';
 import { Container, Header, Title, Content, Form, Input, Item, Button, Text } from 'native-base';
 import Expo, { Permissions, Notifications } from 'expo';
 import {Actions} from 'react-native-router-flux';
@@ -17,17 +17,20 @@ export default class Main extends Component {
 // var authToken = await AsyncStorage.getItem('HASURA_AUTH_TOKEN');
 // And use it in your headers
 // headers = { "Authorization" : "Bearer " + authToken }
+
+var authToken = AsyncStorage.getItem({token: 'HASURA_AUTH_TOKEN'});
 var requestOptions = {
     "method": "POST",
     "headers": {
         "Content-Type": "application/json",
+        "Authorization" : "Bearer " + authToken
     }
 };
 
 var body = {
     "to": this.state.userID,
     "title": "",
-    "message": this.state.message
+    "message": this.state.message,
 };
 
 requestOptions.body = JSON.stringify(body);
@@ -40,10 +43,14 @@ fetch(url, requestOptions)
 	console.log(result);
 })
 .catch(function(error) {
-	console.log('Request Failed:' + error);
+	console.log('Request Failed  :' + error);
 });
 
         var config = {
+            "method": "POST",
+            "headers": {
+                "Content-Type": "application/json"
+            },
             apiKey: "AIzaSyDcFCf97JEsGNmkrcRwWpH6QEh_2Vx7YpA",
             authDomain: "hasura-custom-notification.firebaseapp.com",
             databaseURL: "https://hasura-custom-notification.firebaseio.com",
@@ -52,20 +59,12 @@ fetch(url, requestOptions)
             messagingSenderId: "598821450820"
           };
           firebase.initializeApp(config);
+        };
 
-    const {status} = Permissions.askAsync(Permissions.NOTIFICATIONS);
-    if (status!= 'granted') {
-      return;
-    }
-    let token = Notifications.getExpoPushTokenAsync();
-    userID = firebase.auth().currentUser.uid;
-    firebase.database().ref('/users/'+userID).set( {token: token}); 
-    }
-
-    componentDidMount() {
+        componentDidMount() {
          
-        alert("Logged In Successfully!");
-    };
+            alert("Logged In Successfully!");
+        };
 
     _handleButtonPressLogout = () => {
         var url = "https://auth.dankness95.hasura-app.io/";
