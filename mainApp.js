@@ -4,6 +4,7 @@ import { Container, Header, Title, Content, Form, Input, Item, Button, Text } fr
 import Expo, { Permissions, Notifications } from 'expo';
 import {Actions} from 'react-native-router-flux';
 import * as firebase from 'firebase';
+import { auth } from 'firebase';
 
 export default class Main extends Component {
 
@@ -18,12 +19,10 @@ export default class Main extends Component {
 // And use it in your headers
 // headers = { "Authorization" : "Bearer " + authToken }
 
-var authToken = AsyncStorage.getItem({token: 'HASURA_AUTH_TOKEN'});
 var requestOptions = {
     "method": "POST",
     "headers": {
         "Content-Type": "application/json",
-        "Authorization" : "Bearer " + authToken
     }
 };
 
@@ -33,9 +32,32 @@ var body = {
     "message": this.state.message,
 };
 
+var requestOptions = {
+    "method": "GET",
+    "headers": {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer" + authToken
+    }
+};
+
+var config = {
+    "method": "POST",
+    "headers": {
+        "Content-Type": "application/json"
+    },
+    apiKey: "AIzaSyDcFCf97JEsGNmkrcRwWpH6QEh_2Vx7YpA",
+    authDomain: "hasura-custom-notification.firebaseapp.com",
+    databaseURL: "https://hasura-custom-notification.firebaseio.com",
+    projectId: "hasura-custom-notification",
+    storageBucket: "hasura-custom-notification.appspot.com",
+    messagingSenderId: "598821450820"
+  };
+  firebase.initializeApp(config);
+
+
 requestOptions.body = JSON.stringify(body);
 
-fetch(url, requestOptions)
+fetch(url, requestOptions, config)
 .then(function(response) {
 	return response.json();
 })
@@ -46,19 +68,6 @@ fetch(url, requestOptions)
 	console.log('Request Failed  :' + error);
 });
 
-        var config = {
-            "method": "POST",
-            "headers": {
-                "Content-Type": "application/json"
-            },
-            apiKey: "AIzaSyDcFCf97JEsGNmkrcRwWpH6QEh_2Vx7YpA",
-            authDomain: "hasura-custom-notification.firebaseapp.com",
-            databaseURL: "https://hasura-custom-notification.firebaseio.com",
-            projectId: "hasura-custom-notification",
-            storageBucket: "hasura-custom-notification.appspot.com",
-            messagingSenderId: "598821450820"
-          };
-          firebase.initializeApp(config);
         };
 
         componentDidMount() {
