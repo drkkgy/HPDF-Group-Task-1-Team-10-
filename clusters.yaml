@@ -1,7 +1,7 @@
 - alias: hasura
   config:
     configmap: controller-conf
-    namespace: accompanist58-hasura
+    namespace: contriteness28-hasura
   data: null
-  kubeContext: accompanist58
-  name: accompanist58
+  kubeContext: contriteness28
+  name: contriteness28
