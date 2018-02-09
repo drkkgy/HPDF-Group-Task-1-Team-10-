@@ -3,7 +3,7 @@ var session = require('express-session');
 var http = require('http');
 var bodyParser = require('body-parser');
 var morgan = require('morgan');
-var port  = 8080;//<----- Control the port no from here
+var port  = 3000;//<----- Control the port no from here
 var server = require('http').Server(app);// needed to deploy on server
 var fetchAction =  require('node-fetch');
 var randomInt = require('random-int');
@@ -36,7 +36,7 @@ var H_id = {
     ]
 }; // for storing Hasura Id
 // Fire Base Setup
-/*
+
 // --------------------------------------------------------------------------------------------
 var admin = require('firebase-admin');
 var serviceAccount = require('./hasura-custom-notification-firebase-adminsdk-f4kqo-b6d8c6ce91.json');
@@ -49,7 +49,6 @@ admin.initializeApp({
 var serverKey = 'AAAAi2yKNEQ:APA91bHATD7JYj1Ja9XBGZY3V9y3Hgkk0azgm98y9ujRYcuu4kVyS1NQSSznpb_ZLQTXLUokWP0DkMrmfCMl1YHRU1isSiV5o8JHZXL9sCkeZmZ53j7GBOlFvR1BtJ4oF3qM5ZwqIOGq';
 var fcm = new FCM(serverKey);
 
-*/
 
 // ----------------------------------------------------------------
 
@@ -60,7 +59,16 @@ var url_Signup = "https://auth.dankness95.hasura-app.io/v1/signup";
 
 // backend api HomePage
 app.get('/',(req,res) =>{
-res.send('Welcome to the Backend API Built Using Hasura !! Compiled by Ankit');
+  console.log("Request made to server welcome page!!\n");
+//res.send('Welcome to the Backend API Built Using Hasura !! Compiled by Ankit');
+res.writeHead(200, {'Content-Type': 'application/json'});
+
+var welcome_obj = {
+  message: 'Welcome to the Backend API Built Using Hasura !! Compiled by Ankit',
+  status: 200
+};
+
+res.end(JSON.stringify(welcome_obj));
 });
 // Authentication Module
 // UI of Hasuras auth api is being used 
@@ -224,7 +232,7 @@ fetchAction(url_data, requestOptions)
 
 });
 //-----------------------------------------------------------
-/*
+
 // -------------------------------------------------------------------------------------------------------
 // Notification Sending Module using Fire Base
 app.get('/auth/Send_Notification/:Token/:Title/:Notification_Message', (req,res) => {
@@ -250,7 +258,7 @@ fcm.send(message)
     });
 
 });
-*/
+
 // ---------------------------------------------------------------------------
 // Image upload url
 var url_Upload = "https://filestore.dankness95.hasura-app.io/v1/file";
