@@ -1,5 +1,7 @@
-# HPDF-Group-Task-1-Team-10-
+## HPDF-Group-Task-1-Team-10-
 (React Native)
+<b>Note: The react native code is in <i>ReactNative branch</i> of same github repository.</b>
+
 Introduction to Notify!
 
 The main motive of this app is to notify(simply push message) someone(registered with app) by using beautiful features and design.
