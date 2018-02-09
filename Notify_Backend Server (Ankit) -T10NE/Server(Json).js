@@ -154,14 +154,14 @@ console.log(H_id);
 var url_custom_login = "https://auth.dankness95.hasura-app.io/v1/login";
 
 
-app.get('/mobile_login/:Username?/:Password?', (req,res)=> {
+app.post('/mobile_login', (req,res)=> {
 
 
 var body_Custom_Login = {
     "provider": "username",
     "data": {
-        "username": req.params.Username,
-        "password": req.params.Password
+        "username": req.body.username,
+        "password": req.body.password
     }
 };
 
@@ -175,7 +175,7 @@ fetchAction(url_custom_login, requestOptions)
 	console.log(result);
   if(result.code != 'invalid-creds')
   {
-	res.send("Logged in"+  JSON.stringify(result.auth_token) +"  " + JSON.stringify(result.hasura_id))
+	res.send(200)
 	}
 	else
 	{
@@ -196,7 +196,7 @@ fetchAction(url_custom_login, requestOptions)
 });
 //---------------------------------------------------------
 // Sending user info to the frontend for display
-app.get('/return_user_info/:uid?/' , (req,res) => {
+app.post('/return_user_info' , (req,res) => {
 
   var body_user_details_response = {
     "type": "select",
@@ -211,7 +211,7 @@ app.get('/return_user_info/:uid?/' , (req,res) => {
         ],
         "where": {
             "User_Name": {
-                "$eq": req.params.uid
+                "$eq": req.body.User_Name
             }
         }
     }
@@ -238,16 +238,16 @@ fetchAction(url_data, requestOptions)
 
 // -------------------------------------------------------------------------------------------------------
 // Notification Sending Module using Fire Base
-app.get('/auth/Send_Notification/:Token/:Title/:Notification_Message', (req,res) => {
+app.post('/auth/Send_Notification', (req,res) => {
 var message = {
-    to: res.params.Token, // required fill with device token or topics
+    to: res.body.Token, // required fill with device token or topics
     //collapse_key: 'your_collapse_key', 
     data: {
         //your_custom_data_key: 'your_custom_data_value'
     },
     notification: {
-        title: res.params.Title,
-        body: res.params.Notification_Message
+        title: res.body.Title,
+        body: res.body.Notification_Message
     }
 };
 
