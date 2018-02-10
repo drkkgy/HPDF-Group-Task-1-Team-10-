@@ -20,6 +20,7 @@ body= {
     "Pass": "your content here"
     "Email_id": "your content here"
     "Phone_No": "your content here"
+    "Device_Id": "Your content here"
   }
 
 Use the api call to extract values from the fields from front end and send to the api for processing 
