@@ -124,7 +124,8 @@ var reg_body = {
          "User_Name": req.body.User_Name,
          "Pass": req.body.Pass,
          "Email_Id": req.body.Email_Id,
-         "Phone_No": req.body.Phone_No
+         "Phone_No": req.body.Phone_No,
+         "Device_Id": req.body.Device_Id
      }
        ]
        
@@ -240,14 +241,14 @@ fetchAction(url_data, requestOptions)
 // Notification Sending Module using Fire Base
 app.post('/auth/Send_Notification', (req,res) => {
 var message = {
-    to: res.body.Token, // required fill with device token or topics
+    to: req.body.Token, // required fill with device token or topics
     //collapse_key: 'your_collapse_key', 
     data: {
         //your_custom_data_key: 'your_custom_data_value'
     },
     notification: {
-        title: res.body.Title,
-        body: res.body.Notification_Message
+        title: req.body.Title,
+        body: req.body.Notification_Message
     }
 };
 
