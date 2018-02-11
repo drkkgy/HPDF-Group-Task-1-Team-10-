@@ -12,7 +12,7 @@ export default class Main extends Component {
 
     _onSendButtonPress = () => {
 
-        var url = "https://api.dankness95.hasura-app.io/auth/Send_Notification/A/B/C";
+        var url = "https://api.dankness95.hasura-app.io/auth/Send_Notification";
 
 // If you have the auth token saved in offline storage, obtain it in async componentDidMount
 // var authToken = await AsyncStorage.getItem('HASURA_AUTH_TOKEN');
@@ -31,6 +31,10 @@ var body = {
     "title": "",
     "message": this.state.message,
 };
+
+var authToken ={
+    "auth_token": "0c276ba3fcb816972cde7889aab5ca5e01c07d518d92a344",
+}
 
 var requestOptions = {
     "method": "GET",
