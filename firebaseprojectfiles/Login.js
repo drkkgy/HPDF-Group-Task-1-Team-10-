@@ -17,7 +17,7 @@ export default class LoginScreen extends Component {
 
 var requestOptions = {
     "method": "POST",
-    "headers": {
+    "Headers": {
         "Content-Type": "application/json"
     }
 };
@@ -29,7 +29,7 @@ var body = {
     "Pass": this.state.password,
     "Email_id": this.state.email,
     "Phone_No": this.state.mobile,
-    "Device_Id": ""
+    "Device_Id": "abcd"
   }
   
 requestOptions.body = JSON.stringify(body);

@@ -1,0 +1,7 @@
+- alias: hasura
+  config:
+    configmap: controller-conf
+    namespace: alienated68-hasura
+  data: null
+  kubeContext: alienated68
+  name: alienated68

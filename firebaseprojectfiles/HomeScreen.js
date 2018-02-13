@@ -5,9 +5,12 @@ import { StackNavigator } from 'react-navigation';
 import Expo from 'expo';
 import Login from './Login';
 import {Actions} from 'react-native-router-flux';
+import * as firebase from 'firebase'; 
+import { auth, storage, apps, app } from 'firebase';
+import { config } from 'rx';
 
 export default class Home extends Component {
-
+    
     state= {username: "", password: ""};
 
     constructor() {
@@ -26,11 +29,14 @@ async componentWillMount() {
         }
 
   _handleButtonPressLogin = () => {
+
+     auth.Auth = null;
+
     var url = "https://api.dankness95.hasura-app.io/mobile_login";
 
     var requestOptions = {
         "method": "POST",
-        "headers": {
+        "Headers": {
             "Content-Type": "application/json"
         }
     };
@@ -42,42 +48,37 @@ async componentWillMount() {
     
     requestOptions.body = JSON.stringify(body);
     
-    fetch(url, requestOptions)
+    fetch(url, requestOptions, config)
     .then(
-    this.onLoginSuccessfull.bind(this)
-    
+    this.onLoginSuccessfull.bind(this), 
 )    
 
     .then(function(result) {
         console.log(result);
         // To save the auth token received to offline storage
-        //var authToken = result.auth_token
-        //AsyncStorage.setItem('HASURA_AUTH_TOKEN', authToken);
     })
     .catch(function(error) {
         console.log('Request Failed:' + error);
     });
   }
-  onLoginSuccessfull = async () => {
 
-    let resp= await this._handleButtonPressLogin;
+  onLoginSuccessfull = () => {
     var status= {
-        "method": "GET",
+        "method": "POST",
         "headers": {
             "Content-Type": "application/json"
         },
-         "url": "https://api.dankness95.hasura-app.io/mobile_login",
     }
-    if(status !== 200){
-      if (resp.status === 504) {
-        alert("Network Error, Check your internet connection")
-      } else {
+    if(auth.Auth == "" ){
+
         alert("Error, Unauthorized, Invalid username or password")      
       }
-    } else {
-      this.setState({isLoggedIn:true})  
+
+     else {
+      this.setState({isLoggedIn:true});
+      return Actions.main;  
     }
-  }
+};
 
     render(){
 
