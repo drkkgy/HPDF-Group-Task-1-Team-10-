@@ -10,7 +10,7 @@ XXXXXXX = Url to your profile page which on sucess full login will redirect you 
 https://auth.brunet29.hasura-app.io/ui/?=https://xyz.com
 --------------------------------------------------------------------------------------------
 For signup (Use by both mobile and web
----------------------------------------------------------------------------------------
+-----------------------------------Url to Perform Login----------------------------------------------------
 https://api.dankness95.hasura-app.io/register
 
 body= {
@@ -30,7 +30,7 @@ You will recieve a call back in the form of a string (for sucess or failure)
 Sucess :-Your Account has been created sucessfully !
 
 Failure :-User Name Alredy Exist try logginig in with the Id
--------------------------------------------------------------------------------------
+--------------------------------------Mobile Login function-----------------------------------------------
 for authenticationg to Mobile app
 
 https://api.dankness95.hasura-app.io/mobile_login
@@ -58,7 +58,7 @@ on unsucessful login
 for errors 
 
 error
------------------------------------------------------------------------------------------------------
+---------------------------------------------Url for Custom Push Notification--------------------------------------------------------
 For Custom push notification
 
 https://api.dankness95.hasura-app.io/auth/Send_Notification
@@ -77,12 +77,26 @@ Successfully sent with response: (Response here)
 on failure
 Something has gone wrong!
 
------------------------------------------------Feature-Under-Development---------------------------------------------------------
-https://api.dankness95.hasura-app.io/Upload/A/
+----------------------------------------------Url for Uploading user pic------------------------------------------------
+For Uploading user pics
 
-A - Filelocation on the local computer will be pushed here //Some dubt here will clarify
+https://api.dankness95.hasura-app.io/Upload/
 
------------------------------------------------------------------------------------------------
+Pass the following header 
+
+header
+{
+ "Auth": "Token here"
+ "User_Name": "Username here"
+}
+
+On sucess you get following String Respones
+
+Uploaded sucessfully !
+On Unsucess full upload you will get following String Responses
+Error uploading the file
+-------------------------------------------Url to display user info on front end----------------------------------------------------
+User Info display on front end
 https://api.dankness95.hasura-app.io/return_user_info
 
 body= {
@@ -91,3 +105,44 @@ body= {
 Enter the username to recieve the user data 
 
 response comes in json format
+---------------------------------------------Url to Logout--------------------------------------------------------
+For Logout 
+https://api.dankness95.hasura-app.io/auth/Logout
+
+Here Pass the User name in json format
+{
+ "User_Name": "user name here"
+}
+
+On sucess full logout you will get following response
+{
+    
+   "message": "logged out"
+
+}
+
+On unsucess full logout you get 
+{
+    
+   "message": "invalid authorization token"
+
+}
+-----------------------------------------To display Logged in user-----------------------------------------------------------
+for displaying logged in user
+
+https://api.dankness95.hasura-app.io/Users/Active_Users
+
+you just pass a empty post request system based on the loged in user display the list 
+
+[
+    
+   {
+        
+        "User_Name": "asd1234"
+    
+   }
+]
+-----------------------------------------------------------------------------------------------------
+Created by Ankit Yadav at Hasura !! using Hasura !!
+
+---------------------------------------------------------------------------------------------

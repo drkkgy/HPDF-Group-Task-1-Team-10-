@@ -454,7 +454,7 @@ fetchAction(url_Logout,requestOptions_Logout)
   return response.json();
 })
 .then(function(result){
-  //---------------Updating loged in status------------------------------
+  //---------------Updating logged in status------------------------------
   var reg_body_Login_status = {
        "type": "update", 
        "args": {
