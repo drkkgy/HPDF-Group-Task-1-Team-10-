@@ -26,7 +26,7 @@ app.use(bodyParser.json());
 var url_data = "https://data.dankness95.hasura-app.io/v1/query";
 
 var requestOptions = {
-	"method": "POST",
+  "method": "POST",
     "headers": {
         "Content-Type": "application/json"
     }
@@ -43,13 +43,13 @@ var H_id = {
 // Fire Base Setup
 
 // --------------------------------------------------------------------------------------------
-var admin = require('firebase-admin');
-var serviceAccount = require('./hasura-custom-notification-firebase-adminsdk-f4kqo-b6d8c6ce91.json');
+//var admin = require('firebase-admin');
+//var serviceAccount = require('./hasura-custom-notification-firebase-adminsdk-f4kqo-b6d8c6ce91.json');
 var FCM = require('fcm-push');
-admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount),
-  databaseURL: "https://hasura-custom-notification.firebaseio.com"
-});
+//admin.initializeApp({
+//  credential: admin.credential.cert(serviceAccount),
+//  databaseURL: "https://hasura-custom-notification.firebaseio.com"
+//});
 
 var serverKey = 'AAAAi2yKNEQ:APA91bHATD7JYj1Ja9XBGZY3V9y3Hgkk0azgm98y9ujRYcuu4kVyS1NQSSznpb_ZLQTXLUokWP0DkMrmfCMl1YHRU1isSiV5o8JHZXL9sCkeZmZ53j7GBOlFvR1BtJ4oF3qM5ZwqIOGq';
 var fcm = new FCM(serverKey);
@@ -86,7 +86,7 @@ console.log("Got a Response on the signup page!!\n" );
 // Signing up using hasura hasura
 
 var signup_body = {
-	"provider": "username",
+  "provider": "username",
     "data": {
         "username": req.body.User_Name,
         "password": req.body.Pass
@@ -97,7 +97,7 @@ requestOptions.body = JSON.stringify(signup_body);
 
 fetchAction(url_Signup, requestOptions)
 .then(function(response) {
- 	return response.json();
+  return response.json();
 })
 .then(function(result) {
   // Storing the Hasura ID in local storage
@@ -147,10 +147,10 @@ fetchAction(url_data, requestOptions)
   
 })
 .catch(function(error) {
-	console.log(error);
-	res.send("S.F ->User Name Alredy Exist try logginig in with the different user Id");
+  console.log(error);
+  res.send("S.F ->User Name Alredy Exist try logginig in with the different user Id");
 });
-// --------------Signup details being sent to data base----------	                                      
+// --------------Signup details being sent to data base----------                                       
 
 
 
@@ -175,22 +175,22 @@ requestOptions.body = JSON.stringify(body_Custom_Login);
 
 fetchAction(url_custom_login, requestOptions)
 .then(function(response) {
-	return response.json();
+  return response.json();
 })
 .then(function(result) {
-	console.log(result);
+  console.log(result);
   if(result.code != 'invalid-creds')
   {
-	res.json({"responseCode":200 ,"auth_token":result.auth_token})
-	}
-	else
-	{
-		res.send(JSON.stringify(result.message));
-	}
+  res.json({"responseCode":200 ,"auth_token":result.auth_token})
+  }
+  else
+  {
+    res.send(JSON.stringify(result.message));
+  }
 
-	// To save the auth token received to offline storage
-	 var authToken = result.auth_token;
-	 localStorage.setItem('HASURA_AUTH_TOKEN', authToken);
+  // To save the auth token received to offline storage
+   var authToken = result.auth_token;
+   localStorage.setItem('HASURA_AUTH_TOKEN', authToken);
    console.log(result.hasura_id);
    console.log(localStorage.getItem('HASURA_ID'));
    //-------Saving Auth Token in the database-------------------------------
@@ -227,11 +227,11 @@ fetchAction(url_data, requestOptions)
 }); 
    //---------------------------------------------------------------------
    
-	 //res.send('logged in');
+   //res.send('logged in');
 })
 .catch(function(error) {
-	console.log('Request Failed:' + error);
-	res.send('error');
+  console.log('Request Failed:' + error);
+  res.send('error');
 });
 });
 //---------------------------------------------------------
@@ -302,9 +302,9 @@ fetchAction(url_data, requestOptions)
   return response.json();
 })
 .then(function(result) {
-  var token = result[0].Session_Id;// Change to Device id when finalizing 
+  var token = result[0].Device_Id;// Change to Device id when finalizing 
   console.log(token);
-  localStorage.setItem('session_ID',token)// Change this also
+  localStorage.setItem('Device_Id',token)// Change this also
   console.log("Data fetched " + result);
 })
 .catch(function(error) {
@@ -314,7 +314,7 @@ fetchAction(url_data, requestOptions)
 //---------------------------------------------------------------
 
 var message = {
-    to: localStorage.getItem('session_ID'), // <--- change this also ::: required fill with device token or topics
+    to: localStorage.getItem('Device_Id'), // <--- change this also ::: required fill with device token or topics
     //collapse_key: 'your_collapse_key', 
     data: {
         //your_custom_data_key: 'your_custom_data_value'
@@ -345,26 +345,26 @@ app.post('/Upload/', (req,res)=> {
 console.log(req.headers.User_Name);
 
 var requestOptions_upload = {
-	method: 'POST',
-	headers: {
+  method: 'POST',
+  headers: {
       "Authorization": "Bearer " + "f927e122b7b4e9ae54f0214f50f352623de532a6e4255c08"
-	},
-	body: file
+  },
+  body: file
 }
 
 fetchAction(url_Upload, requestOptions_upload)
 .then(function(response) {
-	return response.json();
+  return response.json();
 })
 .then(function(result) {
-	console.log(result);
+  console.log(result);
   var pic_id = result.file_id;
   localStorage.setItem('Pic_Id' , pic_id);
-	res.send("Image upladed sucess fully");
+  res.send("Image upladed sucess fully");
 })
 .catch(function(error) {
-	console.log('Request Failed:' + error);
-	res.send("Error uploading the file");
+  console.log('Request Failed:' + error);
+  res.send("Error uploading the file");
 });
 
 // Storing the pic id in Database----------------------------------------------------
@@ -391,13 +391,13 @@ fetchAction(url_data, requestOptions)
 })
 .then(function(result) {
 
-  console.log(JSON.stringify(result));
-  res.send("Uploaded sucessfully ! ");
+  console.log(result);
+  res.json({"Upload_Status": "Uploaded sucessfully !","File_Id": localStorage.getItem('Pic_Id')});
 
 })
 .catch(function(error) {
 
-  res.send("D.B->error updating the pic id");
+  res.json({"Upload_Status":"D.B->error updating the pic id"});
 }); 
 // --------------------------------------------------------------------------
 
@@ -454,7 +454,7 @@ fetchAction(url_Logout,requestOptions_Logout)
   return response.json();
 })
 .then(function(result){
-  //---------------Updating logged in status------------------------------
+  //---------------Updating loged in status------------------------------
   var reg_body_Login_status = {
        "type": "update", 
        "args": {
@@ -524,6 +524,42 @@ fetchAction(url_data, requestOptions)
   console.log('Request Failed:' + error);
   res.send("User does not exist")
 });
+
+});
+// ------------------------------Url for updating device id-------------------------------
+app.post('/Users/Device_ID/Update', (req,res) => {
+
+var reg_body_Fire_Base_Device_Token_Update = {
+       "type": "update", 
+       "args": {
+       "table":"User_Details",
+       "where": {
+          "User_Name": {
+               "$eq": req.body.User_Name
+          }
+       },
+       "$set": {
+           "Device_Id": req.body.Device_Id
+       }
+  }
+};
+requestOptions.body = JSON.stringify(reg_body_Fire_Base_Device_Token_Update);
+
+fetchAction(url_data, requestOptions)
+.then(function(response) {
+  return response.json();
+  
+})
+.then(function(result) {
+
+  console.log(JSON.stringify(result));
+  res.send("Token Updated sucessfully ! ");
+
+})
+.catch(function(error) {
+
+  res.send("Error updating Firebase Token status");
+}); 
 
 });
 //---------------------------------------------------------------------------- 
