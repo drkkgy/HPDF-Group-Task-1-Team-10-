@@ -285,7 +285,6 @@ app.post('/auth/Send_Notification', (req,res) => {
     "args": {
         "table": "User_Details",
         "columns": [
-            
             "Session_Id"
         ],
         "where": {
@@ -303,8 +302,8 @@ fetchAction(url_data, requestOptions)
   return response.json();
 })
 .then(function(result) {
-  var token = result.Session_Id;
-  console.log(result.Session_Id);
+  var token = result[0].Session_Id;
+  console.log(token);
   localStorage.setItem('session_ID',token)
   console.log("Data fetched " + result);
 })
