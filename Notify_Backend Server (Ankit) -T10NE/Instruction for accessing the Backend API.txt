@@ -44,7 +44,12 @@ body= {
 
 *here on sucessfull login you get response in the form of string )if you want Json let me know)
 
-OK
+{
+    "responseCode": 200,
+    
+     "auth_token": "b0a6e04decec49bf11b25f6f262504cec96cf3f6bbd43cbb"
+
+}
 
 on unsucessful login
 
@@ -59,7 +64,7 @@ For Custom push notification
 https://api.dankness95.hasura-app.io/auth/Send_Notification
 
 body= {
-    "Token": "your content here"
+    "User_Name": "your content here"
     "Title": "your content here"
     "Notification_Message": "your content here"
 }

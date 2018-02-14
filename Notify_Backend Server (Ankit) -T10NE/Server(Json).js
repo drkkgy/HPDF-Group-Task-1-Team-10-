@@ -392,7 +392,7 @@ fetchAction(url_data, requestOptions)
 .then(function(result) {
 
   console.log(JSON.stringify(result));
-  res.send("Updated sucessfully ! ");
+  res.send("Uploaded sucessfully ! ");
 
 })
 .catch(function(error) {
