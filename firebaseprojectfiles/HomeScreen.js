@@ -69,6 +69,17 @@ async componentWillMount() {
             "Content-Type": "application/json"
         },
     }
+    status = JSON.stringify(status);
+    fetch(status)
+    
+    .then(function(result) {
+        console.log(result);
+        // To save the auth token received to offline storage
+    })
+    .catch(function(error) {
+        console.log('Request Failed:' + error);
+    });
+
     if(auth.Auth == "" ){
 
         alert("Error, Unauthorized, Invalid username or password")      
