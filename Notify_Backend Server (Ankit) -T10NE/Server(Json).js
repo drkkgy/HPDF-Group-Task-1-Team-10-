@@ -365,6 +365,130 @@ fetchAction(url_Upload, requestOptions_upload)
 });
 
 });
+
+// ---------------------------Logout-----------------------------
+var url_Logout = "https://auth.dankness95.hasura-app.io/v1/user/logout";
+app.post('/auth/Logout', (req,res) => {
+
+  // -----------------Fetching the auth token from the server------------------
+  var body_user_details_response_token2 = {
+    "type": "select",
+    "args": {
+        "table": "User_Details",
+        "columns": [
+            "Session_Id"
+        ],
+        "where": {
+            "User_Name": {
+                "$eq": req.body.User_Name
+            }
+        }
+    }
+};
+
+requestOptions.body = JSON.stringify(body_user_details_response_token2);
+
+fetchAction(url_data, requestOptions)
+.then(function(response) {
+  return response.json();
+})
+.then(function(result) {
+  var token1 = result[0].Session_Id;
+  console.log(token1);
+  localStorage.setItem('session_ID1',token1)
+  console.log("Data fetched " + result);
+})
+.catch(function(error) {
+  console.log('Request Failed:' + error);
+  res.send("User does not exist")
+});
+
+var requestOptions_Logout = {
+     "method": "POST",
+     "headers": {
+      "Content-Type": "application/json",
+      "Authorization": "Bearer " + localStorage.getItem('session_ID1')
+     }
+};
+
+fetchAction(url_Logout,requestOptions_Logout)
+.then(function(response){
+  return response.json();
+})
+.then(function(result){
+  //---------------Updating loged in status------------------------------
+  var reg_body_Login_status = {
+       "type": "update", 
+       "args": {
+       "table":"User_Details",
+       "where": {
+          "User_Name": {
+               "$eq": req.body.User_Name
+          }
+       },
+       "$set": {
+           "Session_Id": "NULL"
+       }
+  }
+};
+requestOptions.body = JSON.stringify(reg_body_Login_status);
+
+fetchAction(url_data, requestOptions)
+.then(function(response) {
+  return response.json();
+  
+})
+.then(function(result) {
+
+  console.log(JSON.stringify(result));
+  res.send("Updated sucessfully ! ");
+
+})
+.catch(function(error) {
+
+  res.send("D.B->Error updating Login status");
+}); 
+  // --------------------------------------------------------------------
+  res.send(result);
+})
+.catch(function(error){
+  res.send('Request Failed' + error);
+});
+});
+// ----------------------Display logged in user----------------------------------
+app.post('/Users/Active_Users', (req,res) => {
+
+  var body_Acitve_Logged_in_user_Details = {
+    "type": "select",
+    "args": {
+        "table": "User_Details",
+        "columns": [
+            "User_Name"
+        ],
+        "where": {
+            "Session_Id": {
+                "$ne": "NULL"
+            }
+        }
+    }
+};
+
+requestOptions.body = JSON.stringify(body_Acitve_Logged_in_user_Details);
+
+fetchAction(url_data, requestOptions)
+.then(function(response) {
+  return response.json();
+})
+.then(function(result) {
+  res.json(result);
+})
+.catch(function(error) {
+  console.log('Request Failed:' + error);
+  res.send("User does not exist")
+});
+
+});
+//---------------------------------------------------------------------------- 
 // Server Started
 app.listen(port);
 console.log('Test Server Started ! on port ' + port);
