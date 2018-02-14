@@ -9,12 +9,17 @@ var fetchAction =  require('node-fetch');
 var randomInt = require('random-int');
 var fs = require('fs');
 
+// setting up local storage
+
+if (typeof localStorage === "undefined" || localStorage === null) {
+  var LocalStorage = require('node-localstorage').LocalStorage;
+  localStorage = new LocalStorage('./scratch');
+}
+
 // Express server
 var app = express();
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
-
-global.n = 10 + randomInt(2 , 1000); 
 
 // Postgress SQL acess linkd
 
@@ -70,8 +75,7 @@ var welcome_obj = {
 
 res.end(JSON.stringify(welcome_obj));
 });
-// Authentication Module
-// UI of Hasuras auth api is being used 
+
 // --------------------------------------------------------------------------------------
 // register module 
 
@@ -93,24 +97,14 @@ requestOptions.body = JSON.stringify(signup_body);
 
 fetchAction(url_Signup, requestOptions)
 .then(function(response) {
- global.H_id = response.json();	
- n = n+1;
-console.log(H_id.hasura_id);
-	return response.json();
+ 	return response.json();
 })
 .then(function(result) {
-//this.K_id = JSON.stringyfy(result.hasura_id);---------------------------
-	console.log(JSON.stringify(result));
-	
-})
-.catch(function(error) {
-	console.log(error);
-	res.send("S.F ->User Name Alredy Exist try logginig in with the Id");
-});
-n = n + randomInt(20,20000);// Temperoroary mechanism
-console.log(n);
-// --------------Signup details being sent to data base----------	                                      
-//function wait(){ 
+  // Storing the Hasura ID in local storage
+  var hasuraId = result.hasura_id;
+  localStorage.setItem('HASURA_ID', hasuraId);
+
+  //---------Data being sent to the database-------------
 
 var reg_body = {
        "type": "insert", 
@@ -118,7 +112,7 @@ var reg_body = {
        "table":"User_Details",
        "objects":[
          {
-         "Hasura_Id": JSON.stringify(H_id.hasura_id + n),
+         "Hasura_Id": localStorage.getItem('HASURA_ID'),
          "F_Name": req.body.F_Name,
          "L_Name": req.body.L_Name,
          "User_Name": req.body.User_Name,
@@ -135,20 +129,31 @@ requestOptions.body = JSON.stringify(reg_body);
 
 fetchAction(url_data, requestOptions)
 .then(function(response) {
-	return response.json();
-	
+  return response.json();
+  
 })
 .then(function(result) {
-	console.log(JSON.stringify(result));
-	res.send("Your Account has been created sucessfully ! ");
+
+  console.log(JSON.stringify(result));
+  res.send("Your Account has been created sucessfully ! ");
+
 })
 .catch(function(error) {
-	res.send("D.B->Error Creating account try after some time");
-}); 
-console.log(JSON.stringify(H_id.hasura_id));
-console.log(H_id);
 
-//setTimeout(wait,3000);
+  res.send("D.B->Error Creating account try after some time");
+}); 
+//-----------------------------------------------------
+  
+  
+})
+.catch(function(error) {
+	console.log(error);
+	res.send("S.F ->User Name Alredy Exist try logginig in with the different user Id");
+});
+// --------------Signup details being sent to data base----------	                                      
+
+
+
 });
 // ----------------------------------------------------------------------------------------------
 // Mobile customized authentication
@@ -176,7 +181,7 @@ fetchAction(url_custom_login, requestOptions)
 	console.log(result);
   if(result.code != 'invalid-creds')
   {
-	res.send(200)
+	res.json({"responseCode":200 ,"auth_token":result.auth_token})
 	}
 	else
 	{
@@ -184,16 +189,50 @@ fetchAction(url_custom_login, requestOptions)
 	}
 
 	// To save the auth token received to offline storage
-	 //var authToken = result.auth_token
-	 //window.localStorage.setItem('HASURA_AUTH_TOKEN', authToken);
+	 var authToken = result.auth_token;
+	 localStorage.setItem('HASURA_AUTH_TOKEN', authToken);
+   console.log(result.hasura_id);
+   console.log(localStorage.getItem('HASURA_ID'));
+   //-------Saving Auth Token in the database-------------------------------
+   var reg_body_authtoken = {
+       "type": "update", 
+       "args": {
+       "table":"User_Details",
+       "where": {
+          "User_Name": {
+               "$eq": req.body.username
+          }
+       },
+       "$set": {
+           "Session_Id": localStorage.getItem('HASURA_AUTH_TOKEN')
+       }
+  }
+};
+requestOptions.body = JSON.stringify(reg_body_authtoken);
+
+fetchAction(url_data, requestOptions)
+.then(function(response) {
+  return response.json();
+  
+})
+.then(function(result) {
+
+  console.log(JSON.stringify(result));
+  res.send("auth token saved sucessfully sucessfully ! ");
+
+})
+.catch(function(error) {
+
+  res.send("D.B->Error storing auth token");
+}); 
+   //---------------------------------------------------------------------
+   
 	 //res.send('logged in');
 })
 .catch(function(error) {
 	console.log('Request Failed:' + error);
 	res.send('error');
 });
-
- 
 });
 //---------------------------------------------------------
 // Sending user info to the frontend for display
@@ -240,8 +279,43 @@ fetchAction(url_data, requestOptions)
 // -------------------------------------------------------------------------------------------------------
 // Notification Sending Module using Fire Base
 app.post('/auth/Send_Notification', (req,res) => {
+//------------------------------Fetching user token-----------------------------------
+ var body_user_details_response_token = {
+    "type": "select",
+    "args": {
+        "table": "User_Details",
+        "columns": [
+            
+            "Session_Id"
+        ],
+        "where": {
+            "User_Name": {
+                "$eq": req.body.User_Name
+            }
+        }
+    }
+};
+
+requestOptions.body = JSON.stringify(body_user_details_response_token);
+
+fetchAction(url_data, requestOptions)
+.then(function(response) {
+  return response.json();
+})
+.then(function(result) {
+  var token = result.Session_Id;
+  console.log(result.Session_Id);
+  localStorage.setItem('session_ID',token)
+  console.log("Data fetched " + result);
+})
+.catch(function(error) {
+  console.log('Request Failed:' + error);
+  res.send("User does not exist")
+});
+//---------------------------------------------------------------
+
 var message = {
-    to: req.body.Token, // required fill with device token or topics
+    to: localStorage.getItem('session_ID'), // required fill with device token or topics
     //collapse_key: 'your_collapse_key', 
     data: {
         //your_custom_data_key: 'your_custom_data_value'
