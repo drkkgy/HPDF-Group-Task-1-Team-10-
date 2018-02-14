@@ -49,13 +49,6 @@ For simplicity to use the server the node server is already deployed in the clus
 ---------------------------------------------------Backend Api Url Signatures----------------------------------------------------------
 
 These Url will work for this cluster only (You can tweak them for different cluster if the projects is migrated)
-Refer Hasura Docs v0.15 (Link:-https://docs.hasura.io/0.15/manual/getting-started/index.html)
-Authentication (use by Web app only)
-----------------------------------------------------
-https://auth.dankness95.hasura-app.io/ui/?=XXXXXXXX -> Use this link to redirect the web-app to the login screen
-XXXXXXX = Url to your profile page which on success full login will redirect you to your home page 
---------------------------------------------------------------------------------------------
-These Url will work for this cluster only (You can tweak them for different cluster if the projects is migrated)
 
 Refferecen Hasura Docs v0.15 (Link:-https://docs.hasura.io/0.15/manual/getting-started/index.html)
 -------------------------------------(No More in use)------------------------------
@@ -67,7 +60,7 @@ XXXXXXX = Url to your profile page which on sucess full login will redirect you 
 https://auth.brunet29.hasura-app.io/ui/?=https://xyz.com
 --------------------------------------------------------------------------------------------
 For signup (Use by both mobile and web
----------------------------------------------------------------------------------------
+-----------------------------------Url to Perform Login----------------------------------------------------
 https://api.dankness95.hasura-app.io/register
 
 body= {
@@ -87,7 +80,7 @@ You will recieve a call back in the form of a string (for sucess or failure)
 Sucess :-Your Account has been created sucessfully !
 
 Failure :-User Name Alredy Exist try logginig in with the Id
--------------------------------------------------------------------------------------
+--------------------------------------Mobile Login function-----------------------------------------------
 for authenticationg to Mobile app
 
 https://api.dankness95.hasura-app.io/mobile_login
@@ -101,7 +94,12 @@ body= {
 
 *here on sucessfull login you get response in the form of string )if you want Json let me know)
 
-OK
+{
+    "responseCode": 200,
+    
+     "auth_token": "b0a6e04decec49bf11b25f6f262504cec96cf3f6bbd43cbb"
+
+}
 
 on unsucessful login
 
@@ -110,13 +108,13 @@ on unsucessful login
 for errors 
 
 error
------------------------------------------------------------------------------------------------------
+---------------------------------------------Url for Custom Push Notification--------------------------------------------------------
 For Custom push notification
 
 https://api.dankness95.hasura-app.io/auth/Send_Notification
 
 body= {
-    "Token": "your content here"
+    "User_Name": "your content here"
     "Title": "your content here"
     "Notification_Message": "your content here"
 }
@@ -129,12 +127,33 @@ Successfully sent with response: (Response here)
 on failure
 Something has gone wrong!
 
------------------------------------------------Feature-Under-Development---------------------------------------------------------
-https://api.dankness95.hasura-app.io/Upload/A/
+----------------------------------------------Url for Uploading user pic------------------------------------------------
+For Uploading user pics
 
-A - Filelocation on the local computer will be pushed here //Some dubt here will clarify
+https://api.dankness95.hasura-app.io/Upload/
 
------------------------------------------------------------------------------------------------
+Pass the following header 
+
+header
+{
+ "Auth": "Token here"
+ "User_Name": "Username here"
+}
+
+On sucess you get following String Respones
+
+{
+    "Upload_Status": "Uploaded sucessfully !",
+    
+     "File_Id": "9839e300-2dcf-426e-800a-ecaa88a28937"
+
+}
+On Unsucess full upload you will get following String Responses
+{
+    "Upload_Status": "D.B->error updating the pic id"
+}
+-------------------------------------------Url to display user info on front end----------------------------------------------------
+User Info display on front end
 https://api.dankness95.hasura-app.io/return_user_info
 
 body= {
@@ -143,3 +162,60 @@ body= {
 Enter the username to recieve the user data 
 
 response comes in json format
+---------------------------------------------Url to Logout--------------------------------------------------------
+For Logout 
+https://api.dankness95.hasura-app.io/auth/Logout
+
+Here Pass the User name in json format
+{
+ "User_Name": "user name here"
+}
+
+On sucess full logout you will get following response
+{
+    
+   "message": "logged out"
+
+}
+
+On unsucess full logout you get 
+{
+    
+   "message": "invalid authorization token"
+
+}
+-----------------------------------------To display Logged in user-----------------------------------------------------------
+for displaying logged in user
+
+https://api.dankness95.hasura-app.io/Users/Active_Users
+
+you just pass a empty post request system based on the loged in user display the list 
+
+[
+    
+   {
+        
+        "User_Name": "asd1234"
+    
+   }
+]
+----------------------------------------------------Firebase Token Refresh Link-------------------------
+https://api.dankness95.hasura-app.io/Users/Device_ID/Update
+
+Send the data in this format 
+{
+  "User_Id": "your data",
+  "Device_Id":"Your data"
+}
+
+On sucess full updation you get following message
+
+Token Updated sucessfully ! 
+
+On unsucessful updation you get following message
+
+-----------------------------------------------------------------------------------------------------
+Created by Ankit Yadav at Hasura !! using Hasura !!
+
+Error updating Firebase Token status
+-------------------------------------------------------
