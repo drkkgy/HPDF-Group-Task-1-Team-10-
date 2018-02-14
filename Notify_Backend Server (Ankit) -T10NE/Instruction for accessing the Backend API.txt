@@ -92,9 +92,16 @@ header
 
 On sucess you get following String Respones
 
-Uploaded sucessfully !
+{
+    "Upload_Status": "Uploaded sucessfully !",
+    
+     "File_Id": "9839e300-2dcf-426e-800a-ecaa88a28937"
+
+}
 On Unsucess full upload you will get following String Responses
-Error uploading the file
+{
+    "Upload_Status": "D.B->error updating the pic id"
+}
 -------------------------------------------Url to display user info on front end----------------------------------------------------
 User Info display on front end
 https://api.dankness95.hasura-app.io/return_user_info
@@ -142,7 +149,23 @@ you just pass a empty post request system based on the loged in user display the
     
    }
 ]
+----------------------------------------------------Firebase Token Refresh Link-------------------------
+https://api.dankness95.hasura-app.io/Users/Device_ID/Update
+
+Send the data in this format 
+{
+  "User_Id": "your data",
+  "Device_Id":"Your data"
+}
+
+On sucess full updation you get following message
+
+Token Updated sucessfully ! 
+
+On unsucessful updation you get following message
+
 -----------------------------------------------------------------------------------------------------
 Created by Ankit Yadav at Hasura !! using Hasura !!
 
+Error updating Firebase Token status
 ---------------------------------------------------------------------------------------------
