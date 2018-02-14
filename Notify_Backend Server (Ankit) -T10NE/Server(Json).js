@@ -302,9 +302,9 @@ fetchAction(url_data, requestOptions)
   return response.json();
 })
 .then(function(result) {
-  var token = result[0].Session_Id;
+  var token = result[0].Session_Id;// Change to Device id when finalizing 
   console.log(token);
-  localStorage.setItem('session_ID',token)
+  localStorage.setItem('session_ID',token)// Change this also
   console.log("Data fetched " + result);
 })
 .catch(function(error) {
@@ -314,7 +314,7 @@ fetchAction(url_data, requestOptions)
 //---------------------------------------------------------------
 
 var message = {
-    to: localStorage.getItem('session_ID'), // required fill with device token or topics
+    to: localStorage.getItem('session_ID'), // <--- change this also ::: required fill with device token or topics
     //collapse_key: 'your_collapse_key', 
     data: {
         //your_custom_data_key: 'your_custom_data_value'
@@ -339,14 +339,15 @@ fcm.send(message)
 // ---------------------------------------------------------------------------
 // Image upload url
 var url_Upload = "https://filestore.dankness95.hasura-app.io/v1/file";
-app.get('/Upload/:File_location?/', (req,res)=> {
-//res.send('aaaaa');
-var file = fs.readFile(res.params.File_location);
+var file = '';
+app.post('/Upload/', (req,res)=> {
+
+console.log(req.headers.User_Name);
+
 var requestOptions_upload = {
 	method: 'POST',
 	headers: {
-	  "Content-Type": image/png,
-      "Authorization": "Bearer" + "f215da1ee0d1c8074047afcacd785372e2665d448bffb2e6"
+      "Authorization": "Bearer " + "f927e122b7b4e9ae54f0214f50f352623de532a6e4255c08"
 	},
 	body: file
 }
@@ -357,12 +358,49 @@ fetchAction(url_Upload, requestOptions_upload)
 })
 .then(function(result) {
 	console.log(result);
+  var pic_id = result.file_id;
+  localStorage.setItem('Pic_Id' , pic_id);
 	res.send("Image upladed sucess fully");
 })
 .catch(function(error) {
 	console.log('Request Failed:' + error);
 	res.send("Error uploading the file");
 });
+
+// Storing the pic id in Database----------------------------------------------------
+var reg_body_Pic_Id_Update = {
+       "type": "update", 
+       "args": {
+       "table":"User_Details",
+       "where": {
+          "User_Name": {
+               "$eq": req.headers.User_Name
+          }
+       },
+       "$set": {
+           "Pic_Id": localStorage.getItem('Pic_Id')
+       }
+  }
+};
+requestOptions.body = JSON.stringify(reg_body_Pic_Id_Update);
+
+fetchAction(url_data, requestOptions)
+.then(function(response) {
+  return response.json();
+  
+})
+.then(function(result) {
+
+  console.log(JSON.stringify(result));
+  res.send("Updated sucessfully ! ");
+
+})
+.catch(function(error) {
+
+  res.send("D.B->error updating the pic id");
+}); 
+// --------------------------------------------------------------------------
+
 
 });
 
