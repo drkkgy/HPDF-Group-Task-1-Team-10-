@@ -37,7 +37,7 @@ async componentWillMount() {
     var requestOptions = {
         "method": "POST",
         "Headers": {
-            "Content-Type": "application/json"
+            "Content-Type": "application/x-www-form-urlencoded"
         }
     };
     

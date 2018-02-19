@@ -12,7 +12,7 @@ export default class Main extends Component {
 
     _onSendButtonPress = () => {
 
-        var url = "https://www.gstatic.com/firebasejs/4.9.1/firebase.js";
+        var url = "https://api.dankness95.hasura-app.io/auth/Send_Notification";
 
 // If you have the auth token saved in offline storage, obtain it in async componentDidMount
 // var authToken = await AsyncStorage.getItem('HASURA_AUTH_TOKEN');
@@ -68,7 +68,7 @@ fetch(url, requestOptions, config)
         };
 
     _handleButtonPressLogout = () => {
-        var url = "https://auth.dankness95.hasura-app.io/";
+        var url = "https://api.dankness95.hasura-app.io/auth/Logout";
     
         var requestOptions = {
             "method": "POST",
@@ -76,10 +76,13 @@ fetch(url, requestOptions, config)
                 "Content-Type": "application/json"
             }
         };
+        var body = {
+            "User_Name": this.state.userID
+        }
 
         requestOptions.body = JSON.stringify(body);
         
-        fetch(url, requestOptions)
+        fetch(url, requestOptions, body)
         .then(async function (response) {
             return response.json();
         })

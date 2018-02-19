@@ -28,8 +28,7 @@ var body = {
     "User_Name": this.state.username,
     "Pass": this.state.password,
     "Email_id": this.state.email,
-    "Phone_No": this.state.mobile,
-    "Device_Id": "abcd"
+    "Phone_No": this.state.mobile
   }
   
 requestOptions.body = JSON.stringify(body);
