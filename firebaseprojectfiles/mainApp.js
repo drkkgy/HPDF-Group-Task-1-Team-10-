@@ -75,16 +75,17 @@ fetch(url, requestOptions, config)
             "headers": {
                 "Content-Type": "application/json"
             }
-        };
-        var body = {
-            "User_Name": this.state.userID
+            }
+
+            var body = {
+                "User_Name": this.state.userID
         }
 
         requestOptions.body = JSON.stringify(body);
         
-        fetch(url, requestOptions, body)
-        .then(async function (response) {
-            return response.json();
+        fetch(url, requestOptions)
+        .then(function (response) {
+            return Actions.HomeScreen();
         })
         .then(function(result) {
             console.log(result);
