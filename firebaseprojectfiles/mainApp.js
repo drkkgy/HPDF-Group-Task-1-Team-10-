@@ -5,6 +5,7 @@ import Expo, { Permissions, Notifications } from 'expo';
 import {Actions} from 'react-native-router-flux';
 import * as firebase from 'firebase';
 import { auth } from 'firebase';
+import { Firebase } from 'react-native-firebase';
 
 export default class Main extends Component {
 
@@ -14,8 +15,8 @@ export default class Main extends Component {
 
         var url = "https://api.dankness95.hasura-app.io/auth/Send_Notification";
 
-// If you have the auth token saved in offline storage, obtain it in async componentDidMount
-// var authToken = await AsyncStorage.getItem('HASURA_AUTH_TOKEN');
+// If you have the auth token saved in offline storage, obtain it in
+var authToken = AsyncStorage.getItem('HASURA_AUTH_TOKEN');
 // And use it in your headers
 // headers = { "Authorization" : "Bearer " + authToken }
 
@@ -23,7 +24,7 @@ var requestOptions = {
     "method": "POST",
     "headers": {
         "Content-Type": "application/json",
-    }
+     "Authorization" : "Bearer " + authToken }
 };
 
 var body = {
@@ -45,11 +46,11 @@ var config = {
     messagingSenderId: "598821450820"
   };
   firebase.initializeApp(config);
-
+  console.log('Firebase: ', firebase.app());
 
 requestOptions.body = JSON.stringify(body);
 
-fetch(url, requestOptions, config)
+fetch(url, requestOptions)
 .then(function(response) {
 	return response.json();
 })
@@ -65,6 +66,7 @@ fetch(url, requestOptions, config)
         componentDidMount() {
          
             alert("Logged In Successfully!");
+            alert(console.info);
         };
 
     _handleButtonPressLogout = () => {
@@ -90,8 +92,8 @@ fetch(url, requestOptions, config)
         .then(function(result) {
             console.log(result);
             // To save the auth token received to offline storage
-            //var authToken = result.auth_token
-            //AsyncStorage.setItem('HASURA_AUTH_TOKEN', authToken);
+            var authToken = result.auth_token
+            AsyncStorage.setItem('HASURA_AUTH_TOKEN', authToken);
         })
         .catch(function(error) {
             console.log('Request Failed:' + error);

@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "771372166398",
+    "firebase_url": "https://notify-a74b5.firebaseio.com",
+    "project_id": "notify-a74b5",
+    "storage_bucket": "notify-a74b5.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:771372166398:android:14eb1f7a55f749a3",
+        "android_client_info": {
+          "package_name": "com.facebook.react.tests.gradle"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "771372166398-5evr5dmfnvd839mi5nk917tijojlurge.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyByyzWPQZU1SgrB9x6dBqDYhAaXfAY8vpA"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

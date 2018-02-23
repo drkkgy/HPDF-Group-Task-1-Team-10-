@@ -58,6 +58,8 @@ async componentWillMount() {
     });
   }
 
+   
+
   onLoginSuccessfull = () => {
       var url= "https://api.dankness95.hasura-app.io/mobile_login";
 
