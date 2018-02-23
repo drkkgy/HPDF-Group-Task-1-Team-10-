@@ -40,7 +40,7 @@ export default class Ngrouped extends Component {
       this.state = {
         table:{
         limit:  "5",
-        height:'254px',
+        height:'315px',
         },
         Data : ['All Offline'],
         username : "",
@@ -53,13 +53,7 @@ export default class Ngrouped extends Component {
 
     setTokenSent =(sent)=> {window.localStorage.setItem('sentToServer', sent ? true : false);}
 
-    sendToken = (currentToken) => {
-      if (this.isTokenSentToServer()) {
-        this.sendTokenToServer(currentToken); //Send the current token to your server.
-        this.setTokenSent(true);
-      } else {
-        console.log('Token already sent to server !!');
-      }}
+    sendToken = (currentToken) => {  this.sendTokenToServer(currentToken); }
 
 componentDidMount(){
   fetch(urlX, requestOptionsX)    //get user info
@@ -123,7 +117,7 @@ insertTokenAtServer = (tokens) => {
     }
 };
   requestOptions.body = JSON.stringify(body);
-  fetch(url, requestOptions)                   
+  fetch(url, requestOptions)
   .then((response)=> {
     return response.json();
   })
@@ -171,7 +165,7 @@ sendDirectNotif =(from,to,body,fcm_tkn)=> {
     'title': from,
     'body': body,
     'icon': '/images/notify.png',
-    'click_action': 'https://ui.beneficence95.hasura-app.io/home'
+    'click_action': 'https://ui.beneficence95.hasura-app.io/viewall'
   };
 
   fetch('https://fcm.googleapis.com/fcm/send', {
@@ -192,7 +186,7 @@ this.updateMessages(from,to,body);
   }
 
 updateMessages = (from,to,message) =>{
-  date = new Date();
+  date = Date().slice(0,25);
   body = {
     "type": "insert",
     "args": {
@@ -221,8 +215,17 @@ fetch(url, requestOptions)                      //get fcm user token from server
 
 }
 
-render(){
 
+checkLoggedIn=()=> {
+  let authToken = window.localStorage.getItem('HASURA_AUTH_TOKEN');
+    if(authToken===null){
+      window.location.href = '/';
+      alert ("Not logged in !! Please login first");}
+
+}
+
+render(){
+  this.checkLoggedIn();
 return(
   <div>
     <Paper style={style} zDepth={5} rounded={true} >

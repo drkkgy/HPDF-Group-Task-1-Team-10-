@@ -105,7 +105,7 @@ login =()=> {
           /><br/>
           <br/>
           <RaisedButton onClick={(e)=>this.onSubmit(e)} label="LOGIN" secondary={true} />
-          <FlatButton label=" " />
+          <FlatButton label=" " disabled={true}/>
           <Link to='/signup'><RaisedButton label="REGISTER" primary={true} /></Link>
           </form>
           <br/>

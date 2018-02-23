@@ -9,17 +9,6 @@ let pickUser='default';
 
 export default class ActionsBar extends React.Component {
 
-  constructor(props){
-    super(props);
-    this.state = {
-
-    };
-  }
-
-  componentWillMount(){
-  this.setState({Data : this.props.transfer});
-  }
-
  handlepass=(title,message)=> {
    this.props.passnotif(title,message);
  }

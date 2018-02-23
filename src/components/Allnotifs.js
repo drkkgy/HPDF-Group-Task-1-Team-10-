@@ -5,12 +5,13 @@ import Paper from 'material-ui/Paper';
 
 
 const style = {
-  height: 800,
+  height: 1000,
   width: 900,
-  margin: 5,
+  margin: 3,
   textAlign: 'center',
   display: 'inline-block',
 };
+
 
 export default class Main extends Component {
 
@@ -18,17 +19,25 @@ export default class Main extends Component {
     super(props);
     this.state = {
       table:{
-      limit:  "50",
-      height:'500px',
+      limit:  "999",
+      height:'630px',
       },
     };
   }
 
+checkLoggedIn=()=> {
+  let authToken = window.localStorage.getItem('HASURA_AUTH_TOKEN');
+    if(authToken===null){
+      window.location.href = '/';
+      alert ("Not logged in !! Please login first");}
+
+}
 
   render(){
+    this.checkLoggedIn();
   return(
     <div>
-      <Paper style={style} zDepth={5} rounded={true} >
+      <Paper style={style} zDepth={3} rounded={true} >
     <Topnavbar/>
     <Ntable data={this.state.table}/>
        </Paper>

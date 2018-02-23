@@ -56,18 +56,9 @@ export default class NotifDisplay extends React.Component {
       this.setState({ notif: payload.notification.body, peer: payload.notification.title, snack: true });
     });  }
 
-
-  addZero = (i) => {
-      if (i < 10) {  i = "0" + i; }
-      return i;  }
-
-getNotifTime = () => {
-      var d = new Date();
-      var h = this.addZero(d.getUTCHours());
-      var m = this.addZero(d.getUTCMinutes());
-      var s = this.addZero(d.getUTCSeconds());
-      var x =  "@ GMT " +h + ":" + m + ":" + s;
-      this.setState({ntime: x});
+getNotifTime = () => {  
+      let d =  Date().slice(0,25);
+      this.setState({ntime: d});
   }
 //Todo : include file id/link in request sent to server to display each users profile image
 

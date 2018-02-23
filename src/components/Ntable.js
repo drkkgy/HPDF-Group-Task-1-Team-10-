@@ -137,8 +137,8 @@ let row = (x,i) =>
           />
 
         </Tabs>
-      
-        <Table onRowSelection={this.handleRowSelection}  multiSelectable={false} height={this.props.data.height}>
+
+        <Table onRowSelection={this.handleRowSelection}  multiSelectable={false} height={this.props.data.height} fixedHeader={false} style={{ tableLayout: 'auto' }}>
           <TableHeader>
             <TableRow>
               <TableHeaderColumn>TIME</TableHeaderColumn>

@@ -102,7 +102,7 @@ const requestOptions = {
 
           <br/>
           <RaisedButton onClick={(e)=>this.onSubmit(e)} label="SIGNUP" secondary={true} />
-          <FlatButton label=" " />
+          <FlatButton label=" " disabled={true}/>
           <Link to='/'><RaisedButton label="Login" primary={true} /></Link>
           </form>
           <br/>

@@ -1,6 +1,6 @@
 {
   "name": "Notify",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "private": true,
   "author": "Manish Sharma",
   "dependencies": {
@@ -15,7 +15,7 @@
     "react-scripts": "1.1.0"
   },
   "scripts": {
-    "start": "SET PORT=3002 && react-scripts start",
+    "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"

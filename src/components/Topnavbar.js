@@ -12,18 +12,16 @@ const style = {
   display: 'inline-block',
 };
 
-
-var fetchAction =  require('node-fetch');
-var wmsg="";
-var url = "https://auth.dankness95.hasura-app.io/v1/user/logout";
-var usr = "https://auth.dankness95.hasura-app.io/v1/user/info";
-var authToken = window.localStorage.getItem('HASURA_AUTH_TOKEN');
-var headers = { "Authorization" : "Bearer " + authToken }
-var requestOptions = {
+let wmsg="";
+let url = "https://auth.dankness95.hasura-app.io/v1/user/logout";
+let usr = "https://auth.dankness95.hasura-app.io/v1/user/info";
+let authToken = window.localStorage.getItem('HASURA_AUTH_TOKEN');
+let headers = { "Authorization" : "Bearer " + authToken }
+let requestOptions = {
     "method": "POST",
     "headers": headers,
 };
-var requestOptusr = {
+const requestOptusr = {
     "method": "GET",
     "headers": headers,
 };
@@ -39,7 +37,7 @@ export default class Topnavbar extends React.Component {
   }
 
 componentDidMount() {
-  fetchAction(usr, requestOptusr)
+  fetch(usr, requestOptusr)
   .then((response) => {
     return response.json();
   })
@@ -55,7 +53,7 @@ componentDidMount() {
 
   logout=()=>{
     if(authToken!=null){
-    fetchAction(url, requestOptions)
+    fetch(url, requestOptions)
     .then(function(response) {
     	return response.json();
     })
@@ -100,25 +98,3 @@ componentDidMount() {
     );
   }
 }
-
-/*
-src='
-
-import IconMenu from 'material-ui/IconMenu';
-import IconButton from 'material-ui/IconButton';
-import NavigationExpandMoreIcon from 'material-ui/svg-icons/navigation/expand-more';
-import MenuItem from 'material-ui/MenuItem';
-
-
-<IconMenu
-  iconButtonElement={
-    <IconButton touch={true}>
-      <NavigationExpandMoreIcon />
-    </IconButton>
-  }
->
-  <MenuItem primaryText="Profile" />
-  <MenuItem primaryText="Logout" />
-</IconMenu>
-
-*/
