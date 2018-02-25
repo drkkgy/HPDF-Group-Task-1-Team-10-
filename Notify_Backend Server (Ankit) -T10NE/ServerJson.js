@@ -148,7 +148,7 @@ fetchAction(url_data, requestOptions)
 })
 .catch(function(error) {
   console.log(error);
-  res.send("S.F ->User Name Alredy Exist try logginig in with the different user Id");
+  res.send("S.F ->User Name Alredy Exist or pass length less than 8 character try logginig in with proper credentials ");
 });
 // --------------Signup details being sent to data base----------                                       
 
@@ -179,13 +179,13 @@ fetchAction(url_custom_login, requestOptions)
 })
 .then(function(result) {
   console.log(result);
-  if(result.code != 'invalid-creds')
+  if(result.code != 'invalid-creds' && req.body.username !='')
   {
-  res.json({"responseCode":200 ,"auth_token":result.auth_token})
+  res.json({"responseCode":200 ,"auth_token":result.auth_token,"message":JSON.stringify(result.message)});
   }
   else
   {
-    res.send(JSON.stringify(result.message));
+    res.json({"responseCode":400,"auth_token":result.auth_token,"message":JSON.stringify(result.message)});
   }
 
   // To save the auth token received to offline storage
@@ -347,7 +347,8 @@ console.log(req.headers.User_Name);
 var requestOptions_upload = {
   method: 'POST',
   headers: {
-      "Authorization": "Bearer " + "f927e122b7b4e9ae54f0214f50f352623de532a6e4255c08"
+      //"Authorization": "Bearer " + "f927e122b7b4e9ae54f0214f50f352623de532a6e4255c08"
+      "Authorization": "Bearer " + req.headers.auth
   },
   body: file
 }
@@ -360,7 +361,7 @@ fetchAction(url_Upload, requestOptions_upload)
   console.log(result);
   var pic_id = result.file_id;
   localStorage.setItem('Pic_Id' , pic_id);
-  res.send("Image upladed sucess fully");
+  res.send("Image uploaded sucess fully");
 })
 .catch(function(error) {
   console.log('Request Failed:' + error);
@@ -373,8 +374,8 @@ var reg_body_Pic_Id_Update = {
        "args": {
        "table":"User_Details",
        "where": {
-          "User_Name": {
-               "$eq": req.headers.User_Name
+          "Session_Id": {
+               "$eq": req.headers.auth
           }
        },
        "$set": {
@@ -392,19 +393,19 @@ fetchAction(url_data, requestOptions)
 .then(function(result) {
 
   console.log(result);
-  res.json({"Upload_Status": "Uploaded sucessfully !","File_Id": localStorage.getItem('Pic_Id')});
+  res.json({"Upload_Status":500,"File_Id": localStorage.getItem('Pic_Id')});
 
 })
 .catch(function(error) {
 
-  res.json({"Upload_Status":"D.B->error updating the pic id"});
+  res.json({"Upload_Status":504,"File_Id": localStorage.getItem('Pic_Id')});
 }); 
 // --------------------------------------------------------------------------
 
 
 });
 
-// ---------------------------Logout-----------------------------
+// ---------------------------Logout----------------------------------------------
 var url_Logout = "https://auth.dankness95.hasura-app.io/v1/user/logout";
 app.post('/auth/Logout', (req,res) => {
 
@@ -438,7 +439,7 @@ fetchAction(url_data, requestOptions)
 })
 .catch(function(error) {
   console.log('Request Failed:' + error);
-  res.send("User does not exist")
+  res.send("User does not exist")//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 });
 
 var requestOptions_Logout = {
@@ -479,12 +480,11 @@ fetchAction(url_data, requestOptions)
 .then(function(result) {
 
   console.log(JSON.stringify(result));
-  res.send("Updated sucessfully ! ");
 
 })
 .catch(function(error) {
 
-  res.send("D.B->Error updating Login status");
+  res.send(error);
 }); 
   // --------------------------------------------------------------------
   res.send(result);
@@ -551,8 +551,12 @@ fetchAction(url_data, requestOptions)
   
 })
 .then(function(result) {
-
+  
   console.log(JSON.stringify(result));
+  if(JSON.stringify(result) == '{"affected_rows":0}')
+  {
+    res.send("User Name Does not exist");
+  }
   res.send("Token Updated sucessfully ! ");
 
 })
