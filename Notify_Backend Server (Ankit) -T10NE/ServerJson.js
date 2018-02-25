@@ -342,12 +342,12 @@ var url_Upload = "https://filestore.dankness95.hasura-app.io/v1/file";
 var file = '';
 app.post('/Upload/', (req,res)=> {
 
-console.log(req.headers.User_Name);
+console.log(req.headers.auth);
 
 var requestOptions_upload = {
   method: 'POST',
   headers: {
-      //"Authorization": "Bearer " + "f927e122b7b4e9ae54f0214f50f352623de532a6e4255c08"
+      
       "Authorization": "Bearer " + req.headers.auth
   },
   body: file
@@ -361,11 +361,11 @@ fetchAction(url_Upload, requestOptions_upload)
   console.log(result);
   var pic_id = result.file_id;
   localStorage.setItem('Pic_Id' , pic_id);
-  res.send("Image uploaded sucess fully");
+  
 })
 .catch(function(error) {
   console.log('Request Failed:' + error);
-  res.send("Error uploading the file");
+  res.json({"Upload_Status":504,"File_Id": localStorage.getItem('Pic_Id')});
 });
 
 // Storing the pic id in Database----------------------------------------------------
@@ -383,6 +383,8 @@ var reg_body_Pic_Id_Update = {
        }
   }
 };
+
+
 requestOptions.body = JSON.stringify(reg_body_Pic_Id_Update);
 
 fetchAction(url_data, requestOptions)
