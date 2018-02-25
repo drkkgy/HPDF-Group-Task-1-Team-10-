@@ -3,9 +3,6 @@ import { View, TextInput, Image, AsyncStorage, status } from 'react-native';
 import { Container, Header, Title, Content, Form, Input, Item, Button, Text } from 'native-base';
 import Expo, { Permissions, Notifications } from 'expo';
 import {Actions} from 'react-native-router-flux';
-import * as firebase from 'firebase';
-import { auth } from 'firebase';
-import { Firebase } from 'react-native-firebase';
 
 export default class Main extends Component {
 
@@ -33,21 +30,6 @@ var body = {
     "message": this.state.message,
 };
 
-var config = {
-    "method": "POST",
-    "headers": {
-        "Content-Type": "application/json"
-    },
-    apiKey: "AIzaSyDcFCf97JEsGNmkrcRwWpH6QEh_2Vx7YpA",
-    authDomain: "hasura-custom-notification.firebaseapp.com",
-    databaseURL: "https://hasura-custom-notification.firebaseio.com",
-    projectId: "hasura-custom-notification",
-    storageBucket: "hasura-custom-notification.appspot.com",
-    messagingSenderId: "598821450820"
-  };
-  firebase.initializeApp(config);
-  console.log('Firebase: ', firebase.app());
-
 requestOptions.body = JSON.stringify(body);
 
 fetch(url, requestOptions)
@@ -65,8 +47,7 @@ fetch(url, requestOptions)
 
         componentDidMount() {
          
-            alert("Logged In Successfully!");
-            alert(console.info);
+            alert("Logged In Successfully to Notify!");
         };
 
     _handleButtonPressLogout = () => {

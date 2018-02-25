@@ -1,8 +1,8 @@
 {
-  "expoServerPort": 19000,
-  "expoServerNgrokUrl": "https://34-ag4.vaibhavk98.firebaseproject.exp.direct",
-  "packagerNgrokUrl": "https://packager.34-ag4.vaibhavk98.firebaseproject.exp.direct",
-  "ngrokPid": 6508,
-  "packagerPort": 19001,
-  "packagerPid": 15292
+  "expoServerPort": null,
+  "packagerPort": null,
+  "packagerPid": null,
+  "expoServerNgrokUrl": null,
+  "packagerNgrokUrl": null,
+  "ngrokPid": null
 }

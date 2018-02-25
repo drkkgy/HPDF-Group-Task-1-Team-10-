@@ -6,14 +6,12 @@ import Expo from 'expo';
 import Login from './Login';
 import {Actions} from 'react-native-router-flux';
 import { error } from 'util';
-
 export default class Home extends Component {
-    
-    state= {username: "", password: ""};
 
     constructor() {
         super();
         this.state = {
+        username: "", password: "",
         isReady: false
         };
         }                
@@ -44,11 +42,10 @@ async componentWillMount() {
     
     requestOptions.body = JSON.stringify(body);
     
-    fetch(url, requestOptions, body)
+    fetch(url, requestOptions)
     .then(
-    this.onLoginSuccessfull.bind(this), 
-)    
-
+    this.onLoginSuccessfull.bind(this)
+    )    
     .then(function(result) {
         console.log(result);
         // To save the auth token received to offline storage
@@ -71,13 +68,17 @@ async componentWillMount() {
     }
     fetch(url, requestOptions)
     .then(function(result) {
-        console.log(result);
-        if (error == null )
-        return Actions.main();
+        var response = result.status;
+       alert(response);
+       if ((result.status) === 200) {
+       return Actions.main();
+       }
+       else if ((result.status) === 504)
+       alert('Invalid Credentials');
         // To save the auth token received to offline storage
     })
     .catch(function(error) {
-        console.log('Request             Failed:' + error);
+        console.log('Request Failed:' + error);
     });
 };
 
