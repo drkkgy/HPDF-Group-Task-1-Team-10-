@@ -8,6 +8,8 @@ var server = require('http').Server(app);// needed to deploy on server
 var fetchAction =  require('node-fetch');
 var randomInt = require('random-int');
 var fs = require('fs');
+var multer = require('multer');
+var upload = multer({dest: 'uploads/'})
 
 // setting up local storage
 
@@ -43,13 +45,13 @@ var H_id = {
 // Fire Base Setup
 
 // --------------------------------------------------------------------------------------------
-//var admin = require('firebase-admin');
-//var serviceAccount = require('./hasura-custom-notification-firebase-adminsdk-f4kqo-b6d8c6ce91.json');
+var admin = require('firebase-admin');
+var serviceAccount = require('./hasura-custom-notification-firebase-adminsdk-f4kqo-b6d8c6ce91.json');
 var FCM = require('fcm-push');
-//admin.initializeApp({
-//  credential: admin.credential.cert(serviceAccount),
-//  databaseURL: "https://hasura-custom-notification.firebaseio.com"
-//});
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount),
+  databaseURL: "https://hasura-custom-notification.firebaseio.com"
+});
 
 var serverKey = 'AAAAi2yKNEQ:APA91bHATD7JYj1Ja9XBGZY3V9y3Hgkk0azgm98y9ujRYcuu4kVyS1NQSSznpb_ZLQTXLUokWP0DkMrmfCMl1YHRU1isSiV5o8JHZXL9sCkeZmZ53j7GBOlFvR1BtJ4oF3qM5ZwqIOGq';
 var fcm = new FCM(serverKey);
@@ -119,7 +121,7 @@ var reg_body = {
          "Pass": req.body.Pass,
          "Email_Id": req.body.Email_Id,
          "Phone_No": req.body.Phone_No,
-         "Device_Id": req.body.Device_Id
+         //"Device_Id": req.body.Device_Id
      }
        ]
        
@@ -285,7 +287,7 @@ app.post('/auth/Send_Notification', (req,res) => {
     "args": {
         "table": "User_Details",
         "columns": [
-            "Session_Id"
+            "Device_Id"
         ],
         "where": {
             "User_Name": {
@@ -339,16 +341,16 @@ fcm.send(message)
 // ---------------------------------------------------------------------------
 // Image upload url
 var url_Upload = "https://filestore.dankness95.hasura-app.io/v1/file";
-var file = '';
-app.post('/Upload/', (req,res)=> {
-
-console.log(req.headers.auth);
+app.post('/Upload/', upload.single('image'), (req,res)=> {
+  console.log(req.file)
+var file = req.file;
 
 var requestOptions_upload = {
   method: 'POST',
   headers: {
-      
-      "Authorization": "Bearer " + req.headers.auth
+      "Content-Type": "image/png",
+      //"Authorization": "Bearer " + req.headers.auth
+      "Authorization": "Bearer " + '649cf866719e5feba7b19893a15bff8e378318fa75409c21'
   },
   body: file
 }
@@ -365,7 +367,7 @@ fetchAction(url_Upload, requestOptions_upload)
 })
 .catch(function(error) {
   console.log('Request Failed:' + error);
-  res.json({"Upload_Status":504,"File_Id": localStorage.getItem('Pic_Id')});
+  res.json({"Upload_Status":504,"File_Id": ''});
 });
 
 // Storing the pic id in Database----------------------------------------------------
@@ -374,8 +376,8 @@ var reg_body_Pic_Id_Update = {
        "args": {
        "table":"User_Details",
        "where": {
-          "Session_Id": {
-               "$eq": req.headers.auth
+          "User_Name": {
+               "$eq": req.headers.user_name
           }
        },
        "$set": {
