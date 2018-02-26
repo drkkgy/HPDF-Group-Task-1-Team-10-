@@ -166,6 +166,42 @@ you just pass a empty post request system based on the loged in user display the
     
    }
 ]
+-----------------------------------------To Update the file id in database---------------------------------------
+
+https://api.dankness95.hasura-app.io/File_ID
+
+Here Pass the User name in json format
+{
+ "User_Name": "user name here",
+ "File_id": "File id recieved from hasura "
+}
+
+for uploading the binary file in hasura file store of our cluster use this link directly 
+
+https://filestore.dankness95.hasura-app.io/v1/file  
+
+Response format will be 
+
+{
+    
+"file_id": "5c08c475-c806-4972-a389-f0d55ed43a72",
+    
+"user_id": 1,
+    
+"user_role": "admin",
+    
+"content_type": null,
+    
+"file_status": "uploaded",
+    
+"created_at": "2018-02-26T13:36:33.202978Z",
+    
+"file_size": 691
+
+}
+
+
+
 -----------------------------------------------------------------------------------------------------
 Created by Ankit Yadav at Hasura !! using Hasura !!
 
