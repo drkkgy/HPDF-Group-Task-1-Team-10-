@@ -73,7 +73,7 @@ async componentWillMount() {
        if ((result.status) === 200) {
        return Actions.main();
        }
-       else if ((result.status) === 504)
+       else if ((result.status) === 400)
        alert('Invalid Credentials');
         // To save the auth token received to offline storage
     })

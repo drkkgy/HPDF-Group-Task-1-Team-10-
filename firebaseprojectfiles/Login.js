@@ -49,6 +49,7 @@ fetch(url, requestOptions)
 	console.log('Request Failed:' + error);
 });
   }
+
     render(){
       return (
                <View Scrollable style={{ backgroundColor: "#3498db" , flex: 1, padding: 20, justifyContent: 'center'}}>

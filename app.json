@@ -1,9 +1,20 @@
 {
   "expo": {
+    "name": "Notify",
+    "version": "1.0.0",
     "sdkVersion": "23.0.0",
+    "android": {
+      "package": "com.notify.notify"
+    },
     "splash": {
       "image": "https://pbs.twimg.com/profile_images/561915970063568896/rh-YHuoW.png",
       "backgroundColor": "#2196F3"
-    }  
+    },
+    "slug": "notify",
+    "isDetached": true,
+    "detach": {
+      "scheme": "exp3f3a214e63ad48ffaef9e0bcd4e06836",
+      "androidExpoViewUrl": "https://s3.amazonaws.com/exp-exponent-view-code/android-v2.1.2-sdk23.0.0-d47f172b-1ed3-4c8f-9e48-239052c678b6.tar.gz"
+    }
   }
 }
