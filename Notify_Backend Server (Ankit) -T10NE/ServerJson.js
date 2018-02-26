@@ -3,13 +3,11 @@ var session = require('express-session');
 var http = require('http');
 var bodyParser = require('body-parser');
 var morgan = require('morgan');
-var port  = 3000;//<----- Control the port no from here
+var port  = 8080;//<----- Control the port no from here
 var server = require('http').Server(app);// needed to deploy on server
 var fetchAction =  require('node-fetch');
 var randomInt = require('random-int');
 var fs = require('fs');
-var multer = require('multer');
-var upload = multer({dest: 'uploads/'})
 
 // setting up local storage
 
@@ -45,14 +43,15 @@ var H_id = {
 // Fire Base Setup
 
 // --------------------------------------------------------------------------------------------
-var admin = require('firebase-admin');
-var serviceAccount = require('./hasura-custom-notification-firebase-adminsdk-f4kqo-b6d8c6ce91.json');
+//var admin = require('firebase-admin');
+//var serviceAccount = require('./hasura-custom-notification-firebase-adminsdk-f4kqo-b6d8c6ce91.json');
 var FCM = require('fcm-push');
-admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount),
-  databaseURL: "https://hasura-custom-notification.firebaseio.com"
-});
+//admin.initializeApp({
+//  credential: admin.credential.cert(serviceAccount),
+//  databaseURL: "https://hasura-custom-notification.firebaseio.com"
+//});
 
+var serverKey2 = 'AAAAi2yKNEQ:APA91bFqm6V4bpUImALPYVqeaBQzJDrHj-7dJMCG6cBNxyAW3COAyexU2CQScmkJ-6mGGCmZNAsYx__lSemafVV2tM6Ar1c8kul0ANWIbteHF8o8slp7XoKpRPv3kSjLMyU8mAsJwC2t';
 var serverKey = 'AAAAi2yKNEQ:APA91bHATD7JYj1Ja9XBGZY3V9y3Hgkk0azgm98y9ujRYcuu4kVyS1NQSSznpb_ZLQTXLUokWP0DkMrmfCMl1YHRU1isSiV5o8JHZXL9sCkeZmZ53j7GBOlFvR1BtJ4oF3qM5ZwqIOGq';
 var fcm = new FCM(serverKey);
 
@@ -341,7 +340,7 @@ fcm.send(message)
 // ---------------------------------------------------------------------------
 // Image upload url
 var url_Upload = "https://filestore.dankness95.hasura-app.io/v1/file";
-app.post('/Upload/', upload.single('image'), (req,res)=> {
+app.post('/Upload/', (req,res)=> {
   console.log(req.file)
 var file = req.file;
 
@@ -459,7 +458,7 @@ fetchAction(url_Logout,requestOptions_Logout)
   return response.json();
 })
 .then(function(result){
-  //---------------Updating loged in status------------------------------
+  //---------------Updating logged in status------------------------------
   var reg_body_Login_status = {
        "type": "update", 
        "args": {
@@ -531,6 +530,7 @@ fetchAction(url_data, requestOptions)
 
 });
 // ------------------------------Url for updating device id-------------------------------
+
 app.post('/Users/Device_ID/Update', (req,res) => {
 
 var reg_body_Fire_Base_Device_Token_Update = {
@@ -570,7 +570,49 @@ fetchAction(url_data, requestOptions)
 }); 
 
 });
-//---------------------------------------------------------------------------- 
+//-----------------------------Pic_id_update----------------------------------------------- 
+app.post('/File_ID', (req,res) => {
+
+var pic_id = req.body.File_id;
+  localStorage.setItem('Pic_Id' , pic_id);
+
+
+var reg_body_Pic_Id_Update1 = {
+       "type": "update", 
+       "args": {
+       "table":"User_Details",
+       "where": {
+          "User_Name": {
+               "$eq": req.body.User_Name
+          }
+       },
+       "$set": {
+           "Pic_Id": localStorage.getItem('Pic_Id')
+       }
+  }
+};
+
+
+requestOptions.body = JSON.stringify(reg_body_Pic_Id_Update1);
+
+fetchAction(url_data, requestOptions)
+.then(function(response) {
+  return response.json();
+  
+})
+.then(function(result) {
+
+  console.log(result);
+  res.json({"Upload_Status":500,"File_Id": localStorage.getItem('Pic_Id')});
+
+})
+.catch(function(error) {
+
+  res.json({"Upload_Status":504,"File_Id": localStorage.getItem('Pic_Id')});
+}); 
+
+});
+// ----------------------------------------------------------------------------
 // Server Started
 app.listen(port);
 console.log('Test Server Started ! on port ' + port);
