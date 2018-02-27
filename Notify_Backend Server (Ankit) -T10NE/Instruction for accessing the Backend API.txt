@@ -4,14 +4,14 @@ Refferecen Hasura Docs v0.15 (Link:-https://docs.hasura.io/0.15/manual/getting-s
 -------------------------------------(No More in use)------------------------------
 Authetication (use by Web app only) -------------------------------------(No More in use)------------------------------
 ----------------------------------------------------
-https://auth.dankness95.hasura-app.io/ui/?=XXXXXXXX -> Use this link to redirect the webapp to the login screen
+https://auth.beginnings83.hasura-app.io/ui/?=XXXXXXXX -> Use this link to redirect the web-app to the login screen
 
-XXXXXXX = Url to your profile page which on sucess full login will redirect you to your home page 
-https://auth.brunet29.hasura-app.io/ui/?=https://xyz.com
+XXXXXXX = Url to your profile page which on success full login will redirect you to your home page 
+https://auth.beginnings83.hasura-app.io/ui/?=https://xyz.com
 --------------------------------------------------------------------------------------------
 For signup (Use by both mobile and web
 -----------------------------------Url to Perform Registration for new users----------------------------------------------------
-https://api.dankness95.hasura-app.io/register
+https://api.beginnings83.hasura-app.io/register
 
 body= {
     "F_Name": "your content here"
@@ -32,7 +32,7 @@ Failure :-S.F ->User Name Alredy Exist or pass length less than 8 character try 
 --------------------------------------Mobile Login function-----------------------------------------------
 for authenticationg to Mobile app
 
-https://api.dankness95.hasura-app.io/mobile_login
+https://api.beginnings83.hasura-app.io/mobile_login
 
 body= {
     "username": "your content here"
@@ -68,7 +68,7 @@ error
 ---------------------------------------------Url for Custom Push Notification--------------------------------------------------------
 For Custom push notification
 
-https://api.dankness95.hasura-app.io/auth/Send_Notification
+https://api.beginnings83.hasura-app.io/auth/Send_Notification
 
 body= {
     "User_Name": "your content here"
@@ -87,7 +87,7 @@ Something has gone wrong!
 ----------------------------------------------Url for Uploading user pic------------------------------------------------
 For Uploading user pics
 
-https://api.dankness95.hasura-app.io/Upload/
+https://api.beginnings83.hasura-app.io/Upload/
 
 Pass the following header 
 
@@ -121,7 +121,7 @@ On Unsucess full upload you will get following String Responses
 }
 -------------------------------------------Url to display user info on front end----------------------------------------------------
 User Info display on front end
-https://api.dankness95.hasura-app.io/return_user_info
+https://api.beginnings83.hasura-app.io/return_user_info
 
 body= {
     "User_Name": "your content here"
@@ -131,7 +131,7 @@ Enter the username to recieve the user data
 response comes in json format
 ---------------------------------------------Url to Logout--------------------------------------------------------
 For Logout 
-https://api.dankness95.hasura-app.io/auth/Logout
+https://api.beginnings83.hasura-app.io/auth/Logout
 
 Here Pass the User name in json format
 {
@@ -154,7 +154,7 @@ On unsucess full logout you get
 -----------------------------------------To display Logged in user-----------------------------------------------------------
 for displaying logged in user
 
-https://api.dankness95.hasura-app.io/Users/Active_Users
+https://api.beginnings83.hasura-app.io/Users/Active_Users
 
 you just pass a empty post request system based on the loged in user display the list 
 
@@ -168,7 +168,7 @@ you just pass a empty post request system based on the loged in user display the
 ]
 -----------------------------------------To Update the file id in database---------------------------------------
 
-https://api.dankness95.hasura-app.io/File_ID
+https://api.beginnings83.hasura-app.io/File_ID
 
 Here Pass the User name in json format
 {
@@ -178,7 +178,7 @@ Here Pass the User name in json format
 
 for uploading the binary file in hasura file store of our cluster use this link directly 
 
-https://filestore.dankness95.hasura-app.io/v1/file  
+https://filestore.beginnings83.hasura-app.io/v1/file  
 
 Response format will be 
 
