@@ -6,8 +6,8 @@ var morgan = require('morgan');
 var port  = 8080;//<----- Control the port no from here
 var server = require('http').Server(app);// needed to deploy on server
 var fetchAction =  require('node-fetch');
-var randomInt = require('random-int');
 var fs = require('fs');
+var timestamp = require('time-stamp');
 
 // setting up local storage
 
@@ -23,7 +23,7 @@ app.use(bodyParser.json());
 
 // Postgress SQL acess linkd
 
-var url_data = "https://data.dankness95.hasura-app.io/v1/query";
+var url_data = "https://data.beginnings83.hasura-app.io/v1/query";
 
 var requestOptions = {
   "method": "POST",
@@ -32,27 +32,20 @@ var requestOptions = {
     }
 };
 
-var H_id = {
-    "auth_token": "bb6ad8c1638ea501db12fca4acbd76e3665e5c45ec315914",
-    "username": "default",
-    "hasura_id": 33,
-    "hasura_roles": [
-        "user"
-    ]
-}; // for storing Hasura Id
-// Fire Base Setup
+//----------------permiting Origin acess---------------------------------------------------------------------
+app.use(function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  next();
+});
+//--------------------------------------------------------------------------------------------------------
 
 // --------------------------------------------------------------------------------------------
-//var admin = require('firebase-admin');
-//var serviceAccount = require('./hasura-custom-notification-firebase-adminsdk-f4kqo-b6d8c6ce91.json');
-var FCM = require('fcm-push');
-//admin.initializeApp({
-//  credential: admin.credential.cert(serviceAccount),
-//  databaseURL: "https://hasura-custom-notification.firebaseio.com"
-//});
 
-var serverKey2 = 'AAAAi2yKNEQ:APA91bFqm6V4bpUImALPYVqeaBQzJDrHj-7dJMCG6cBNxyAW3COAyexU2CQScmkJ-6mGGCmZNAsYx__lSemafVV2tM6Ar1c8kul0ANWIbteHF8o8slp7XoKpRPv3kSjLMyU8mAsJwC2t';
-var serverKey = 'AAAAi2yKNEQ:APA91bHATD7JYj1Ja9XBGZY3V9y3Hgkk0azgm98y9ujRYcuu4kVyS1NQSSznpb_ZLQTXLUokWP0DkMrmfCMl1YHRU1isSiV5o8JHZXL9sCkeZmZ53j7GBOlFvR1BtJ4oF3qM5ZwqIOGq';
+var FCM = require('fcm-push');
+
+
+var serverKey = 'AAAAi2yKNEQ:APA91bFqm6V4bpUImALPYVqeaBQzJDrHj-7dJMCG6cBNxyAW3COAyexU2CQScmkJ-6mGGCmZNAsYx__lSemafVV2tM6Ar1c8kul0ANWIbteHF8o8slp7XoKpRPv3kSjLMyU8mAsJwC2t';
 var fcm = new FCM(serverKey);
 
 
@@ -60,7 +53,7 @@ var fcm = new FCM(serverKey);
 
 // Hasura Signup Page
 
-var url_Signup = "https://auth.dankness95.hasura-app.io/v1/signup";
+var url_Signup = "https://auth.beginnings83.hasura-app.io/v1/signup";
 
 
 // backend api HomePage
@@ -120,7 +113,7 @@ var reg_body = {
          "Pass": req.body.Pass,
          "Email_Id": req.body.Email_Id,
          "Phone_No": req.body.Phone_No,
-         //"Device_Id": req.body.Device_Id
+         
      }
        ]
        
@@ -158,7 +151,7 @@ fetchAction(url_data, requestOptions)
 });
 // ----------------------------------------------------------------------------------------------
 // Mobile customized authentication
-var url_custom_login = "https://auth.dankness95.hasura-app.io/v1/login";
+var url_custom_login = "https://auth.beginnings83.hasura-app.io/v1/login";
 
 
 app.post('/mobile_login', (req,res)=> {
@@ -248,7 +241,8 @@ app.post('/return_user_info' , (req,res) => {
             "L_Name",
             "User_Name",
             "Email_Id",
-            "Phone_No"
+            "Phone_No",
+            "Pic_Id"
         ],
         "where": {
             "User_Name": {
@@ -277,7 +271,7 @@ fetchAction(url_data, requestOptions)
 });
 //-----------------------------------------------------------
 
-// -------------------------------------------------------------------------------------------------------
+// ----------------------------------------------------------------------------------------------------------------------------------------------------------------------
 // Notification Sending Module using Fire Base
 app.post('/auth/Send_Notification', (req,res) => {
 //------------------------------Fetching user token-----------------------------------
@@ -290,7 +284,7 @@ app.post('/auth/Send_Notification', (req,res) => {
         ],
         "where": {
             "User_Name": {
-                "$eq": req.body.User_Name
+                "$eq": req.body.User_Name_Reciever//<---------------------------------------------------------------------------------------- in notes
             }
         }
     }
@@ -303,6 +297,7 @@ fetchAction(url_data, requestOptions)
   return response.json();
 })
 .then(function(result) {
+  localStorage.setItem('Time_Stamp', timestamp('YYYY/MM/DD:mm:ss'));// generating a time stamp
   var token = result[0].Device_Id;// Change to Device id when finalizing 
   console.log(token);
   localStorage.setItem('Device_Id',token)// Change this also
@@ -312,6 +307,142 @@ fetchAction(url_data, requestOptions)
   console.log('Request Failed:' + error);
   res.send("User does not exist")
 });
+//---------------Storing Details to Databse----------------------
+
+var reg_body_notification = {
+       "type": "insert", 
+       "args": {
+       "table":"User_Notification_Store",
+       "objects":[
+         {
+         "Title": req.body.Title,
+         "Notification": req.body.Notification_Message,
+         "User_Details": req.body.User_Name_Sender,
+         "Status": localStorage.getItem('Status'),
+         "Time_Stamp": localStorage.getItem('Time_Stamp')
+         
+     }
+       ]
+       
+       }
+};
+requestOptions.body = JSON.stringify(reg_body_notification);
+
+fetchAction(url_data, requestOptions)
+.then(function(response) {
+  return response.json();
+  
+})
+.then(function(result) {
+
+  console.log(JSON.stringify(result));
+  localStorage.setItem('Status', true);
+
+  //------------------------------generatingremaining info-------------------------------------------------
+  //--------------Sender F_name and L_Name Fetch------------------------------------------------------- 
+  var body_Notification_Info_Fetch_to = {
+    "type": "select",
+    "args": {
+        "table": "User_Details",
+        "columns": [
+            "F_Name",
+            "L_Name"
+        ],
+        "where": {
+            "User_Name": {
+                "$eq": req.body.User_Name_Sender//------->in notes
+            }
+        }
+    }
+};
+
+requestOptions.body = JSON.stringify(body_Notification_Info_Fetch_to);
+
+fetchAction(url_data, requestOptions)
+.then(function(response) {
+  return response.json();
+})
+.then(function(result) {
+  localStorage.setItem('From', result.F_Name + " " + result.L_Name);
+  console.log("Data fetched " + result);
+})
+.catch(function(error) {
+  console.log('Request Failed:' + error);
+ });
+//-----------------Reciever F_name and L_name Fetch---------------------------------------------------------
+var body_Notification_Info_Fetch_from = {
+    "type": "select",
+    "args": {
+        "table": "User_Details",
+        "columns": [
+            "F_Name",
+            "L_Name"
+        ],
+        "where": {
+            "User_Name": {
+                "$eq": req.body.User_Name_Reciever//-------------------> in notes
+            }
+        }
+    }
+};
+
+requestOptions.body = JSON.stringify(body_Notification_Info_Fetch_from);
+
+fetchAction(url_data, requestOptions)
+.then(function(response) {
+  return response.json();
+})
+.then(function(result) {
+  var Full_Name = (JSON.stringify(result.F_Name) + " " + JSON.stringify(result.L_Name));
+  localStorage.setItem('TO', Full_Name);
+  console.log(localStorage.getItem('TO'));
+  console.log("Data fetched " + result);
+})
+.catch(function(error) {
+  console.log('Request Failed:' + error);
+ });
+ // ----------------------------------------------------------------------------------------------------------
+  //---------------fetching sender and reciever details----------------------------------------------------
+     localStorage.setItem('Time_Stamp', timestamp('YYYY/MM/DD:mm:ss'));
+  //---------------------------------Storing remaing info---------------------------------------------------
+  var body_remaing_Info_Update2 = {
+    "type": "update",
+    "args": {
+        "table": "User_Notification_Store",
+        "where": {
+            "User_Details": {
+                "$eq": req.body.User_Name_Sender
+            }
+        },
+        "$set": {
+            "To": localStorage.getItem('TO'),
+            "From": localStorage.getItem('From'),
+            "Time_Stamp": localStorage.getItem('Time_Stamp')
+        }
+    }
+};
+
+requestOptions.body = JSON.stringify(body_remaing_Info_Update2);
+
+fetchAction(url, requestOptions)
+.then(function(response) {
+  return response.json();
+})
+.then(function(result) {
+  console.log(result);
+})
+.catch(function(error) {
+  console.log('Request Failed:' + error);
+});
+  //--------------------------------------------------------------------------------------------------------
+
+})
+.catch(function(error) {
+  localStorage.setItem('Status', true);
+
+  res.send("Something has gone wrong in Database connection");
+}); 
+
 //---------------------------------------------------------------
 
 var message = {
@@ -328,6 +459,7 @@ var message = {
 
 fcm.send(message)
     .then(function(response){
+
         res.send("Successfully sent with response: " + response);
     })
     .catch(function(err){
@@ -337,9 +469,9 @@ fcm.send(message)
 
 });
 
-// ---------------------------------------------------------------------------
+// ------------------------------------------------------------------------------------------------------------------------------------------------------------------
 // Image upload url
-var url_Upload = "https://filestore.dankness95.hasura-app.io/v1/file";
+var url_Upload = "https://filestore.beginnings83.hasura-app.io/v1/file";
 app.post('/Upload/', (req,res)=> {
   console.log(req.file)
 var file = req.file;
@@ -348,8 +480,7 @@ var requestOptions_upload = {
   method: 'POST',
   headers: {
       "Content-Type": "image/png",
-      //"Authorization": "Bearer " + req.headers.auth
-      "Authorization": "Bearer " + '649cf866719e5feba7b19893a15bff8e378318fa75409c21'
+      "Authorization": "Bearer " + req.headers.auth
   },
   body: file
 }
@@ -409,7 +540,7 @@ fetchAction(url_data, requestOptions)
 });
 
 // ---------------------------Logout----------------------------------------------
-var url_Logout = "https://auth.dankness95.hasura-app.io/v1/user/logout";
+var url_Logout = "https://auth.beginnings83.hasura-app.io/v1/user/logout";
 app.post('/auth/Logout', (req,res) => {
 
   // -----------------Fetching the auth token from the server------------------
@@ -504,7 +635,10 @@ app.post('/Users/Active_Users', (req,res) => {
     "args": {
         "table": "User_Details",
         "columns": [
-            "User_Name"
+            "User_Name",
+            "F_Name",
+            "L_Name",
+            "Pic_Id"
         ],
         "where": {
             "Session_Id": {
@@ -612,7 +746,46 @@ fetchAction(url_data, requestOptions)
 }); 
 
 });
-// ----------------------------------------------------------------------------
+// ------------------------Display message with-------------------------------------------*****NEW FEATURE******------------------
+app.post('/notification/display', (req,res) => {
+
+  var body_sending_Notification_Details = {
+    "type": "select",
+    "args": {
+        "table": "User_Notification_Store",
+        "columns": [
+            "To",
+            "From",
+            "Time_Stamp",
+            "Notification",
+            "Title",
+            "Status"
+        ],
+        "where": {
+            "User_Details": {
+                "$eq": req.body.User_Name
+            }
+        }
+    }
+};
+
+requestOptions.body = JSON.stringify(body_sending_Notification_Details);
+
+fetchAction(url_data, requestOptions)
+.then(function(response) {
+  return response.json();
+})
+.then(function(result) {
+  res.json(result);
+})
+.catch(function(error) {
+  console.log('Request Failed:' + error);
+  res.send("User Has not send any notification so far ")
+});
+
+});
+
+// ------------------------------------------------------------------------------
 // Server Started
 app.listen(port);
 console.log('Test Server Started ! on port ' + port);

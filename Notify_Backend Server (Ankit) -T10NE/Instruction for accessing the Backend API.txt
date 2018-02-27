@@ -1,8 +1,8 @@
 These Url will work for this cluster only (You can tweak them for different cluster if the projects is migrated)
 
-Refferecen Hasura Docs v0.15 (Link:-https://docs.hasura.io/0.15/manual/getting-started/index.html)
+Refference Hasura Docs v0.15 (Link:-https://docs.hasura.io/0.15/manual/getting-started/index.html)
 -------------------------------------(No More in use)------------------------------
-Authetication (use by Web app only) -------------------------------------(No More in use)------------------------------
+Authentication (use by Web app only) -------------------------------------(No More in use)------------------------------
 ----------------------------------------------------
 https://auth.beginnings83.hasura-app.io/ui/?=XXXXXXXX -> Use this link to redirect the web-app to the login screen
 
