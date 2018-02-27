@@ -23,6 +23,7 @@
     "path": "^0.12.7",
     "random-int": "^1.0.0",
     "socket.io": "^2.0.4",
+    "time-stamp": "^2.0.0",
     "whatwg-fetch": "^2.0.3",
     "xml-js": "^1.6.1",
     "xmlhttprequest": "^1.8.0"
