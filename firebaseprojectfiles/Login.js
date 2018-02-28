@@ -18,7 +18,7 @@ export default class LoginScreen extends Component {
 var requestOptions = {
     "method": "POST",
     "Headers": {
-        "Content-Type": "application/json"
+        "Content-Type": "application/x-www-form-urlencoded"
     }
 };
 
@@ -40,7 +40,8 @@ fetch(url, requestOptions)
   this.onLoginSuccess.bind(this))
 
 .then(function(result) {
-	console.log(result);
+  console.log(result);
+  console.info();
 	// To save the auth token received to offline storage
 	//var authToken = result.auth_token
 	//AsyncStorage.setItem('HASURA_AUTH_TOKEN', authToken);

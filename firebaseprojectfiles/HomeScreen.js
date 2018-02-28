@@ -31,7 +31,7 @@ async componentWillMount() {
     var requestOptions = {
         "method": "POST",
         "Headers": {
-            "Content-Type": "application/json"
+            "Content-Type": "application/x-www-form-urlencoded"
         }
     }
     
@@ -44,13 +44,9 @@ async componentWillMount() {
     
     fetch(url, requestOptions)
     .then(function(result) {
-        var response = result.status(responseCode);
+        var response = console.info();
        alert(response);
-       if ((result.status) === 200) {
        return Actions.main();
-       }
-       else if ((result.status) === 400)
-       alert('Invalid Credentials');
         console.log(result);
         // To save the auth token received to offline storage
     })

@@ -21,14 +21,14 @@ var authToken = AsyncStorage.getItem('HASURA_AUTH_TOKEN');
 var requestOptions = {
     "method": "POST",
     "headers": {
-        "Content-Type": "application/json",
+        "Content-Type": "application/x-www-form-urlencoded",
      "Authorization" : "Bearer " + authToken }
 };
 
 var body = {
     "to": this.state.userID,
     "title": "",
-    "message": this.state.message,
+    "message": this.state.message
 };
 
 
@@ -90,7 +90,7 @@ fetch(url, requestOptions)
         var requestOptions = {
             "method": "POST",
             "headers": {
-                "Content-Type": "application/json"
+                "Content-Type": "application/x-www-form-urlencoded"
             }
             }
 
