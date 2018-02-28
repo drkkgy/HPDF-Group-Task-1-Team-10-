@@ -6,27 +6,20 @@ import com.facebook.react.ReactPackage;
 
 import java.util.Arrays;
 import java.util.List;
-import io.invertase.firebase.RNFirebasePackage;
-import io.invertase.firebase.messaging.RNFirebaseMessagingPackage;
 
 // Needed for `react-native link`
-import com.facebook.react.ReactApplication;
-import in.sriraman.sharedpreferences.RNSharedPreferencesReactPackage;
-import io.invertase.firebase.RNFirebasePackage;
-import com.evollu.react.fcm.FIRMessagingPackage;
+// import com.facebook.react.ReactApplication;
 
-public class MainApplication extends Application implements ReactApplication {
+public class MainApplication extends MultiDexApplication {
 
-  @Override
-  protected List<ReactPackage> getPackages() {
+  // Needed for `react-native link`
+  public List<ReactPackage> getPackages() {
     return Arrays.<ReactPackage>asList(
-        new MainReactPackage(),
-            new RNSharedPreferencesReactPackage(),
-            new RNFirebasePackage(),
-            new FIRMessagingPackage(),
-        new RNFirebasePackage(),
-        new RNFirebaseMessagingPackage() // <-- Add this line
+        // Add your own packages here!
+        // TODO: add cool native modules
+
+        // Needed for `react-native link`
+        // new MainReactPackage()
     );
   }
-};
 }

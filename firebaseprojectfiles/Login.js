@@ -13,7 +13,7 @@ export default class LoginScreen extends Component {
 
     state={ firstname: '', lastname: '', username: '', password: '', email: '', mobile: ''};
   _handleButtonPress = () => {
-    var url = "https://api.dankness95.hasura-app.io/register";
+    var url = "https://api.beginnings83.hasura-app.io/register";
 
 var requestOptions = {
     "method": "POST",

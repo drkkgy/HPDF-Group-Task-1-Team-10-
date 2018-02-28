@@ -11,7 +11,7 @@ export default class Main extends Component {
 
     _onSendButtonPress = () => {
 
-        var url = "https://api.dankness95.hasura-app.io/auth/Send_Notification";
+        var url = "https://api.beginnings83.hasura-app.io/auth/Send_Notification";
 
 // If you have the auth token saved in offline storage, obtain it in
 var authToken = AsyncStorage.getItem('HASURA_AUTH_TOKEN');
@@ -31,7 +31,10 @@ var body = {
     "message": this.state.message,
 };
 
+
+
 requestOptions.body = JSON.stringify(body);
+this._fbnotify.bind(this);
 
 fetch(url, requestOptions)
 .then(function(response) {
@@ -43,8 +46,38 @@ fetch(url, requestOptions)
 .catch(function(error) {
 	console.log('Request Failed  :' + error);
 });
-
         };
+        _fbnotify = () => {
+        FCM.requestPermissions();
+        FCM.getFCMToken().then(token => { // Here you get the fcm token
+            let tokenData= {
+                firebaseToken: token
+            };
+            FCM.getFCMToken(tokenData).then((done) => {
+                console.log(done);
+            });
+            // store fcm token in your server
+        });
+        FCM.getInitialNotification().then((notif) => {
+            // for android/ios app killed state
+            if (notif) {
+                alert(notif);
+                // there are two parts of notif. notif.notification contains the notification payload, notif.data contains data payload 
+            }
+        });
+        
+        this.notificationListener = FCM.on(FCMEvent.Notification, async (notif) => {
+            // there are two parts of notif. notif.notification contains the notification payload, notif.data contains data payload
+            if (notif.opened_from_tray) {
+                // handling when app in foreground or background state for both ios and android
+        
+            }
+        });
+        this.refreshTokenListener = FCM.on(FCMEvent.RefreshToken, (token) => {
+            console.log(token);
+            // fcm token may not be available on first load, catch it here
+        });
+    }
 
         componentDidMount() {
          
@@ -52,7 +85,7 @@ fetch(url, requestOptions)
         };
 
     _handleButtonPressLogout = () => {
-        var url = "https://api.dankness95.hasura-app.io/auth/Logout";
+        var url = "https://api.beginnings83.hasura-app.io/auth/Logout";
     
         var requestOptions = {
             "method": "POST",

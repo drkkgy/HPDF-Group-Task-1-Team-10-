@@ -26,7 +26,7 @@ async componentWillMount() {
 
   _handleButtonPressLogin = () => {
 
-    var url = "https://api.dankness95.hasura-app.io/mobile_login";
+    var url = "https://api.beginnings83.hasura-app.io/mobile_login";
 
     var requestOptions = {
         "method": "POST",
@@ -43,10 +43,14 @@ async componentWillMount() {
     requestOptions.body = JSON.stringify(body);
     
     fetch(url, requestOptions)
-    .then(
-    this.onLoginSuccessfull.bind(this)
-    )    
     .then(function(result) {
+        var response = result.status(responseCode);
+       alert(response);
+       if ((result.status) === 200) {
+       return Actions.main();
+       }
+       else if ((result.status) === 400)
+       alert('Invalid Credentials');
         console.log(result);
         // To save the auth token received to offline storage
     })
@@ -54,33 +58,6 @@ async componentWillMount() {
         console.log('Request Failed:' + error);
     });
   }
-
-   
-
-  onLoginSuccessfull = () => {
-      var url= "https://api.dankness95.hasura-app.io/mobile_login";
-
-      var requestOptions = {
-        "method": "POST",
-        "Headers": {
-            "Content-Type": "application/json"
-        }
-    }
-    fetch(url, requestOptions)
-    .then(function(result) {
-        var response = result.status;
-       alert(response);
-       if ((result.status) === 200) {
-       return Actions.main();
-       }
-       else if ((result.status) === 400)
-       alert('Invalid Credentials');
-        // To save the auth token received to offline storage
-    })
-    .catch(function(error) {
-        console.log('Request Failed:' + error);
-    });
-};
 
     render(){
 
