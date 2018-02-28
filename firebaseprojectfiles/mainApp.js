@@ -76,6 +76,7 @@ fetch(url, requestOptions)
         this.refreshTokenListener = FCM.on(FCMEvent.RefreshToken, (token) => {
             console.log(token);
             // fcm token may not be available on first load, catch it here
+        alert('Sent Successfully!!')
         });
     }
 
