@@ -3,50 +3,55 @@ var session = require('express-session');
 var http = require('http');
 var bodyParser = require('body-parser');
 var morgan = require('morgan');
-var port  = 3000;//<----- Control the port no from here
+var port  = 8080;//<----- Control the port no from here
 var server = require('http').Server(app);// needed to deploy on server
 var fetchAction =  require('node-fetch');
-var randomInt = require('random-int');
 var fs = require('fs');
+var timestamp = require('time-stamp');
+var request = require('request');
+var cors = require('cors');
+
+// setting up local storage
+
+
+
+if (typeof localStorage === "undefined" || localStorage === null) {
+  var LocalStorage = require('node-localstorage').LocalStorage;
+  localStorage = new LocalStorage('./scratch');
+}
 
 // Express server
 var app = express();
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 
-global.n = 10 + randomInt(2 , 1000); 
-
 // Postgress SQL acess linkd
 
-var url_data = "https://data.dankness95.hasura-app.io/v1/query";
+var url_data = "https://data.astigmatic44.hasura-app.io/v1/query";//<---
 
 var requestOptions = {
-	"method": "POST",
+  "method": "POST",
     "headers": {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE",
+        "Access-Control-Allow-Headers": "Content-Type",
         "Content-Type": "application/json"
+        //"Content-Type": "multipart/form-data"
     }
 };
 
-var H_id = {
-    "auth_token": "bb6ad8c1638ea501db12fca4acbd76e3665e5c45ec315914",
-    "username": "default",
-    "hasura_id": 33,
-    "hasura_roles": [
-        "user"
-    ]
-}; // for storing Hasura Id
-// Fire Base Setup
+//----------------permiting Origin acess---------------------------------------------------------------------
+
+
+
+//--------------------------------------------------------------------------------------------------------
 
 // --------------------------------------------------------------------------------------------
-var admin = require('firebase-admin');
-var serviceAccount = require('./hasura-custom-notification-firebase-adminsdk-f4kqo-b6d8c6ce91.json');
-var FCM = require('fcm-push');
-admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount),
-  databaseURL: "https://hasura-custom-notification.firebaseio.com"
-});
 
-var serverKey = 'AAAAi2yKNEQ:APA91bHATD7JYj1Ja9XBGZY3V9y3Hgkk0azgm98y9ujRYcuu4kVyS1NQSSznpb_ZLQTXLUokWP0DkMrmfCMl1YHRU1isSiV5o8JHZXL9sCkeZmZ53j7GBOlFvR1BtJ4oF3qM5ZwqIOGq';
+var FCM = require('fcm-push');
+
+
+var serverKey = 'AAAAi2yKNEQ:APA91bFqm6V4bpUImALPYVqeaBQzJDrHj-7dJMCG6cBNxyAW3COAyexU2CQScmkJ-6mGGCmZNAsYx__lSemafVV2tM6Ar1c8kul0ANWIbteHF8o8slp7XoKpRPv3kSjLMyU8mAsJwC2t';
 var fcm = new FCM(serverKey);
 
 
@@ -54,11 +59,25 @@ var fcm = new FCM(serverKey);
 
 // Hasura Signup Page
 
-var url_Signup = "https://auth.dankness95.hasura-app.io/v1/signup";
+var url_Signup = "https://auth.astigmatic44.hasura-app.io/v1/signup";
+
+app.use(express.static("./src"));
+
+app.use(cors());
+
+app.use(function(req, res, next) {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Methods','GET,PUT,POST,DELETE');
+    res.header('Access-Control-Allow-Headers', 'Content-Type');
+    next();
+})
 
 
 // backend api HomePage
 app.get('/',(req,res) =>{
+//----------------setting no cors headers-------------------------
+
+//--------------------------------------------------------------------
   console.log("Request made to server welcome page!!\n");
 //res.send('Welcome to the Backend API Built Using Hasura !! Compiled by Ankit');
 res.writeHead(200, {'Content-Type': 'application/json'});
@@ -70,19 +89,26 @@ var welcome_obj = {
 
 res.end(JSON.stringify(welcome_obj));
 });
-// Authentication Module
-// UI of Hasuras auth api is being used 
+
 // --------------------------------------------------------------------------------------
-// Registring Module
-app.get('/register/:FName?/:LName?/:UserName/:pass/:Email/:Phone_no?', (req,res) => {
+// register module 
+
+app.post('/register', (req,res) => {
+// setting request------format---
+
+
+  //----------------setting no cors headers-------------------------
+//--------------------------------------------------------------------
+
+console.log("Got a Response on the signup page!!\n");
 
 // Signing up using hasura hasura
 
 var signup_body = {
-	"provider": "username",
+  "provider": "username",
     "data": {
-        "username": req.params.UserName,
-        "password": req.params.pass
+        "username": req.body.User_Name,
+        "password": req.body.Pass
     }
 };
 
@@ -90,24 +116,14 @@ requestOptions.body = JSON.stringify(signup_body);
 
 fetchAction(url_Signup, requestOptions)
 .then(function(response) {
- global.H_id = response.json();	
- n = n+1;
-console.log(H_id.hasura_id);
-	return response.json();
+  return response.json();
 })
 .then(function(result) {
-//this.K_id = JSON.stringyfy(result.hasura_id);---------------------------
-	console.log(JSON.stringify(result));
-	
-})
-.catch(function(error) {
-	console.log(error);
-	res.send("S.F ->User Name Alredy Exist try logginig in with the Id");
-});
-n = n + randomInt(20,20000);// Temperoroary mechanism
-console.log(n);
-// --------------Signup details being sent to data base----------	                                      
-//function wait(){ 
+  // Storing the Hasura ID in local storage
+  var hasuraId = result.hasura_id;
+  localStorage.setItem('HASURA_ID', hasuraId);
+
+  //---------Data being sent to the database-------------
 
 var reg_body = {
        "type": "insert", 
@@ -115,13 +131,14 @@ var reg_body = {
        "table":"User_Details",
        "objects":[
          {
-         "Hasura_Id": JSON.stringify(H_id.hasura_id + n),
-         "F_Name": req.params.FName,
-         "L_Name": req.params.LName,
-         "User_Name": req.params.UserName,
-         "Pass": req.params.pass,
-         "Email_Id": req.params.Email,
-         "Phone_No": req.params.Phone_no
+         "Hasura_Id": localStorage.getItem('HASURA_ID'),
+         "F_Name": req.body.F_Name,
+         "L_Name": req.body.L_Name,
+         "User_Name": req.body.User_Name,
+         "Pass": req.body.Pass,
+         "Email_Id": req.body.Email_Id,
+         "Phone_No": req.body.Phone_No,
+         
      }
        ]
        
@@ -131,34 +148,49 @@ requestOptions.body = JSON.stringify(reg_body);
 
 fetchAction(url_data, requestOptions)
 .then(function(response) {
-	return response.json();
-	
+  return response.json();
+  
 })
 .then(function(result) {
-	console.log(JSON.stringify(result));
-	res.send("Your Account has been created sucessfully ! ");
+
+  console.log(JSON.stringify(result));
+  res.json({"message":"Your Account has been created sucessfully ! "});
+
 })
 .catch(function(error) {
-	res.send("D.B->Error Creating account try after some time");
-}); 
-console.log(JSON.stringify(H_id.hasura_id));
-console.log(H_id);
 
-//setTimeout(wait,3000);
+  res.json({"message":"D.B->Error Creating account try after some time"});
+}); 
+//-----------------------------------------------------
+  
+  
+})
+.catch(function(error) {
+  console.log(error);
+  res.json({"message": "S.F ->User Name Alredy Exist or pass length less than 8 character try logginig in with proper credentials"});
+});
+// --------------Signup details being sent to data base----------                                       
+
+
+
 });
 // ----------------------------------------------------------------------------------------------
 // Mobile customized authentication
-var url_custom_login = "https://auth.dankness95.hasura-app.io/v1/login";
+var url_custom_login = "https://auth.astigmatic44.hasura-app.io/v1/login";
 
 
-app.get('/mobile_login/:Username?/:Password?', (req,res)=> {
+app.post('/mobile_login', (req,res)=> {
+
+  //----------------setting no cors headers-------------------------
+
+//--------------------------------------------------------------------
 
 
 var body_Custom_Login = {
     "provider": "username",
     "data": {
-        "username": req.params.Username,
-        "password": req.params.Password
+        "username": req.body.username,
+        "password": req.body.password
     }
 };
 
@@ -166,34 +198,71 @@ requestOptions.body = JSON.stringify(body_Custom_Login);
 
 fetchAction(url_custom_login, requestOptions)
 .then(function(response) {
-	return response.json();
+  return response.json();
 })
 .then(function(result) {
-	console.log(result);
-  if(result.code != 'invalid-creds')
+  console.log(result);
+  if(result.code != 'invalid-creds' && req.body.username !='')
   {
-	res.send("Logged in"+  JSON.stringify(result.auth_token) +"  " + JSON.stringify(result.hasura_id))
-	}
-	else
-	{
-		res.send(JSON.stringify(result.message));
-	}
+  res.json({"responseCode":200 ,"auth_token":result.auth_token,"message":JSON.stringify(result.message)});
+  }
+  else
+  {
+    res.json({"responseCode":400,"auth_token":result.auth_token,"message":JSON.stringify(result.message)});
+  }
 
-	// To save the auth token received to offline storage
-	 //var authToken = result.auth_token
-	 //window.localStorage.setItem('HASURA_AUTH_TOKEN', authToken);
-	 //res.send('logged in');
+  // To save the auth token received to offline storage
+   var authToken = result.auth_token;
+   localStorage.setItem('HASURA_AUTH_TOKEN', authToken);
+   console.log(result.hasura_id);
+   console.log(localStorage.getItem('HASURA_ID'));
+   //-------Saving Auth Token in the database-------------------------------
+   var reg_body_authtoken = {
+       "type": "update", 
+       "args": {
+       "table":"User_Details",
+       "where": {
+          "User_Name": {
+               "$eq": req.body.username
+          }
+       },
+       "$set": {
+           "Session_Id": localStorage.getItem('HASURA_AUTH_TOKEN')
+       }
+  }
+};
+requestOptions.body = JSON.stringify(reg_body_authtoken);
+
+fetchAction(url_data, requestOptions)
+.then(function(response) {
+  return response.json();
+  
+})
+.then(function(result) {
+
+  console.log(JSON.stringify(result));
+  res.json({"message":"auth token saved sucessfully sucessfully ! "});
+
 })
 .catch(function(error) {
-	console.log('Request Failed:' + error);
-	res.send('error');
-});
 
- 
+  res.json({"message":"D.B->Error storing auth token"});
+}); 
+   //---------------------------------------------------------------------
+   
+   
+})
+.catch(function(error) {
+  console.log('Request Failed:' + error);
+  res.json({"message":"error"});
+});
 });
 //---------------------------------------------------------
 // Sending user info to the frontend for display
-app.get('/return_user_info/:uid?/' , (req,res) => {
+app.post('/return_user_info' , (req,res) => {
+
+  
+//--------------------------------------------------------------------
 
   var body_user_details_response = {
     "type": "select",
@@ -204,11 +273,12 @@ app.get('/return_user_info/:uid?/' , (req,res) => {
             "L_Name",
             "User_Name",
             "Email_Id",
-            "Phone_No"
+            "Phone_No",
+            "Pic_Id"
         ],
         "where": {
             "User_Name": {
-                "$eq": req.params.uid
+                "$eq": req.body.User_Name
             }
         }
     }
@@ -226,68 +296,666 @@ fetchAction(url_data, requestOptions)
 })
 .catch(function(error) {
   console.log('Request Failed:' + error);
-  res.send("User does not exist")
+  res.json({"message":"User does not exist"})
 });
 
 
 });
 //-----------------------------------------------------------
 
-// -------------------------------------------------------------------------------------------------------
+// ----------------------------------------------------------------------------------------------------------------------------------------------------------------------
 // Notification Sending Module using Fire Base
-app.get('/auth/Send_Notification/:Token/:Title/:Notification_Message', (req,res) => {
+app.post('/auth/Send_Notification', (req,res) => {
+
+  //----------------setting no cors headers-------------------------
+
+//--------------------------------------------------------------------
+//------------------------------Fetching user token-----------------------------------
+ var body_user_details_response_token = {
+    "type": "select",
+    "args": {
+        "table": "User_Details",
+        "columns": [
+            "Device_Id"
+        ],
+        "where": {
+            "User_Name": {
+                "$eq": req.body.User_Name_Reciever//<---------------------------------------------------------------------------------------- in notes
+            }
+        }
+    }
+};
+
+requestOptions.body = JSON.stringify(body_user_details_response_token);
+
+fetchAction(url_data, requestOptions)
+.then(function(response) {
+  return response.json();
+})
+.then(function(result) {
+  localStorage.setItem('Time_Stamp', timestamp('YYYY/MM/DD:mm:ss'));// generating a time stamp
+  var token = result[0].Device_Id;// Change to Device id when finalizing 
+  console.log(token);
+  localStorage.setItem('Device_Id',token)// Change this also
+  console.log("Data fetched " + result);
+})
+.catch(function(error) {
+  console.log('Request Failed:' + error);
+  localStorage.setItem('Status', false);
+  res.json({"message":"User does not exist"})
+});
+//---------------Storing Details to Databse----------------------
+
+var reg_body_notification = {
+       "type": "insert", 
+       "args": {
+       "table":"User_Notification_Store",
+       "objects":[
+         {
+         "Title": req.body.Title,
+         "Notification": req.body.Notification_Message,
+         "User_Details": req.body.User_Name_Sender,
+         "Status": localStorage.getItem('Status'),
+         "Time_Stamp": localStorage.getItem('Time_Stamp'),
+         "To": req.body.User_Name_Reciever,
+         "From": req.body.User_Name_Sender
+         
+     }
+       ]
+       
+       }
+};
+requestOptions.body = JSON.stringify(reg_body_notification);
+
+fetchAction(url_data, requestOptions)
+.then(function(response) {
+  return response.json();
+  
+})
+.then(function(result) {
+
+  console.log(JSON.stringify(result));
+  localStorage.setItem('Status', true);
+
+  //------------------------------generatingremaining info-------------------------------------------------
+  //--------------Sender F_name and L_Name Fetch------------------------------------------------------- 
+  var body_Notification_Info_Fetch_to = {
+    "type": "select",
+    "args": {
+        "table": "User_Details",
+        "columns": [
+            "F_Name",
+            "L_Name"
+        ],
+        "where": {
+            "User_Name": {
+                "$eq": req.body.User_Name_Sender//------->in notes
+            }
+        }
+    }
+};
+
+requestOptions.body = JSON.stringify(body_Notification_Info_Fetch_to);
+
+fetchAction(url_data, requestOptions)
+.then(function(response) {
+  return response.json();
+})
+.then(function(result) {
+
+  localStorage.setItem('From', result[0].F_Name + " " + result[0].L_Name);
+  console.log("Data fetched " + result);
+})
+.catch(function(error) {
+  console.log('Request Failed:' + error);
+ });
+//-----------------Reciever F_name and L_name Fetch---------------------------------------------------------
+var body_Notification_Info_Fetch_from = {
+    "type": "select",
+    "args": {
+        "table": "User_Details",
+        "columns": [
+            "F_Name",
+            "L_Name"
+        ],
+        "where": {
+            "User_Name": {
+                "$eq": req.body.User_Name_Reciever//-------------------> in notes
+            }
+        }
+    }
+};
+
+requestOptions.body = JSON.stringify(body_Notification_Info_Fetch_from);
+
+fetchAction(url_data, requestOptions)
+.then(function(response) {
+  return response.json();
+})
+.then(function(result) {
+  
+  localStorage.setItem('T0',result[0].F_Name + " " + result[0].L_Name);//
+  console.log(localStorage.getItem('TO'));//
+  console.log("Data fetched " + result);
+})
+.catch(function(error) {
+  console.log('Request Failed:' + error);
+ });
+  //--------------Sender F_name and L_Name Fetch------------------------------------------------------- 
+  var body_Notification_Info_Fetch_to = {
+    "type": "select",
+    "args": {
+        "table": "User_Details",
+        "columns": [
+            "F_Name",
+            "L_Name"
+        ],
+        "where": {
+            "User_Name": {
+                "$eq": req.body.User_Name_Sender//------->in notes
+            }
+        }
+    }
+};
+
+requestOptions.body = JSON.stringify(body_Notification_Info_Fetch_to);
+
+fetchAction(url_data, requestOptions)
+.then(function(response) {
+  return response.json();
+})
+.then(function(result) {
+
+  localStorage.setItem('From', result[0].F_Name + " " + result[0].L_Name);
+  console.log("Data fetched " + result);
+})
+.catch(function(error) {
+  console.log('Request Failed:' + error);
+ });
+//-----------------Reciever F_name and L_name Fetch---------------------------------------------------------
+var body_Notification_Info_Fetch_from = {
+    "type": "select",
+    "args": {
+        "table": "User_Details",
+        "columns": [
+            "F_Name",
+            "L_Name"
+        ],
+        "where": {
+            "User_Name": {
+                "$eq": req.body.User_Name_Reciever//-------------------> in notes
+            }
+        }
+    }
+};
+
+requestOptions.body = JSON.stringify(body_Notification_Info_Fetch_from);
+
+fetchAction(url_data, requestOptions)
+.then(function(response) {
+  return response.json();
+})
+.then(function(result) {
+  
+  localStorage.setItem('T0',result[0].F_Name + " " + result[0].L_Name);//
+  console.log(localStorage.getItem('TO'));//
+  console.log("Data fetched " + result);
+})
+.catch(function(error) {
+  console.log('Request Failed:' + error);
+ });
+ // ----------------------------------------------------------------------------------------------------------
+  //---------------fetching sender and reciever details----------------------------------------------------
+     localStorage.setItem('Time_Stamp', timestamp('YYYY/MM/DD:mm:ss'));
+  //---------------------------------Storing remaing info---------------------------------------------------
+  var body_remaing_Info_Update2 = {
+    "type": "update",
+    "args": {
+        "table": "User_Notification_Store",
+        "where": {
+            "User_Details": {
+                "$eq": req.body.User_Name_Sender
+            }
+        },
+        "$set": {
+            "To": localStorage.getItem('TO'),
+            "From": localStorage.getItem('From'),
+            "Time_Stamp": localStorage.getItem('Time_Stamp'),
+            
+        }
+    }
+};
+
+requestOptions.body = JSON.stringify(body_remaing_Info_Update2);
+
+fetchAction(url, requestOptions)
+.then(function(response) {
+  return response.json();
+})
+.then(function(result) {
+  console.log(result);
+})
+.catch(function(error) {
+  console.log('Request Failed:' + error);
+});
+  //--------------------------------------------------------------------------------------------------------
+
+})
+.catch(function(error) {
+  localStorage.setItem('Status', true);
+
+  //res.json({"message":"Something has gone wrong in Database connection"});
+}); 
+
+//---------------------------------------------------------------
+
 var message = {
-    to: res.params.Token, // required fill with device token or topics
+    to: localStorage.getItem('Device_Id'), // <--- change this also ::: required fill with device token or topics
     //collapse_key: 'your_collapse_key', 
     data: {
         //your_custom_data_key: 'your_custom_data_value'
     },
     notification: {
-        title: res.params.Title,
-        body: res.params.Notification_Message
+        title: req.body.Title,
+        body: req.body.Notification_Message
     }
 };
 
 fcm.send(message)
     .then(function(response){
-        res.send("Successfully sent with response: " + response);
+
+        res.json({"message": "Successfully sent with response: " + response});
     })
     .catch(function(err){
-        res.send("Something has gone wrong!");
+        res.json({"message":"Something has gone wrong!"});
         console.error(err);
     });
 
 });
 
-// ---------------------------------------------------------------------------
+// ------------------------------------------------------------------------------------------------------------------------------------------------------------------
 // Image upload url
-var url_Upload = "https://filestore.dankness95.hasura-app.io/v1/file";
-app.get('/Upload/:File_location?/', (req,res)=> {
-//res.send('aaaaa');
-var file = fs.readFile(res.params.File_location);
+var url_Upload = "https://filestore.astigmatic44.hasura-app.io/v1/file";
+app.post('/Upload/', (req,res)=> {
+
+  //----------------setting no cors headers-------------------------
+
+//--------------------------------------------------------------------
+  console.log(req.file)
+var file = req.file;
+
 var requestOptions_upload = {
-	method: 'POST',
-	headers: {
-	  "Content-Type": image/png,
-      "Authorization": "Bearer" + "f215da1ee0d1c8074047afcacd785372e2665d448bffb2e6"
-	},
-	body: file
+  method: 'POST',
+  headers: {
+      "Content-Type": "image/png",
+      "Authorization": "Bearer " + req.headers.auth
+  },
+  body: file
 }
 
 fetchAction(url_Upload, requestOptions_upload)
 .then(function(response) {
-	return response.json();
+  return response.json();
 })
 .then(function(result) {
-	console.log(result);
-	res.send("Image upladed sucess fully");
+  console.log(result);
+  var pic_id = result.file_id;
+  localStorage.setItem('Pic_Id' , pic_id);
+  
 })
 .catch(function(error) {
-	console.log('Request Failed:' + error);
-	res.send("Error uploading the file");
+  console.log('Request Failed:' + error);
+  res.json({"Upload_Status":504,"File_Id": ''});
+});
+
+// Storing the pic id in Database----------------------------------------------------
+var reg_body_Pic_Id_Update = {
+       "type": "update", 
+       "args": {
+       "table":"User_Details",
+       "where": {
+          "User_Name": {
+               "$eq": req.headers.user_name
+          }
+       },
+       "$set": {
+           "Pic_Id": localStorage.getItem('Pic_Id')
+       }
+  }
+};
+
+
+requestOptions.body = JSON.stringify(reg_body_Pic_Id_Update);
+
+fetchAction(url_data, requestOptions)
+.then(function(response) {
+  return response.json();
+  
+})
+.then(function(result) {
+
+  console.log(result);
+  res.json({"Upload_Status":500,"File_Id": localStorage.getItem('Pic_Id')});
+
+})
+.catch(function(error) {
+
+  res.json({"Upload_Status":504,"File_Id": localStorage.getItem('Pic_Id')});
+}); 
+// --------------------------------------------------------------------------
+
+
+});
+
+// ---------------------------Logout----------------------------------------------
+var url_Logout = "https://auth.astigmatic44.hasura-app.io/v1/user/logout";
+app.post('/auth/Logout', (req,res) => {
+
+  //----------------setting no cors headers-------------------------
+
+//--------------------------------------------------------------------
+
+  // -----------------Fetching the auth token from the server------------------
+  var body_user_details_response_token2 = {
+    "type": "select",
+    "args": {
+        "table": "User_Details",
+        "columns": [
+            "Session_Id"
+        ],
+        "where": {
+            "User_Name": {
+                "$eq": req.body.User_Name
+            }
+        }
+    }
+};
+
+requestOptions.body = JSON.stringify(body_user_details_response_token2);
+
+fetchAction(url_data, requestOptions)
+.then(function(response) {
+  return response.json();
+})
+.then(function(result) {
+  var token1 = result[0].Session_Id;
+  console.log(token1);
+  localStorage.setItem('session_ID1',token1)
+  console.log("Data fetched " + result);
+})
+.catch(function(error) {
+  console.log('Request Failed:' + error);
+  res.json({"message":"User does not exist"})
+});
+
+var requestOptions_Logout = {
+     "method": "POST",
+     "headers": {
+      "Content-Type": "application/json",
+      "Authorization": "Bearer " + localStorage.getItem('session_ID1')
+     }
+};
+
+fetchAction(url_Logout,requestOptions_Logout)
+.then(function(response){
+  return response.json();
+})
+.then(function(result){
+  //---------------Updating logged in status------------------------------
+  var reg_body_Login_status = {
+       "type": "update", 
+       "args": {
+       "table":"User_Details",
+       "where": {
+          "User_Name": {
+               "$eq": req.body.User_Name
+          }
+       },
+       "$set": {
+           "Session_Id": "NULL"
+       }
+  }
+};
+requestOptions.body = JSON.stringify(reg_body_Login_status);
+
+fetchAction(url_data, requestOptions)
+.then(function(response) {
+  return response.json();
+  
+})
+.then(function(result) {
+
+  console.log(JSON.stringify(result));
+
+})
+.catch(function(error) {
+
+  res.json({"message":error});
+}); 
+  // --------------------------------------------------------------------
+  res.json({"message":result});
+})
+.catch(function(error){
+  res.json({"message":"Request Failed" + error});
+});
+});
+// ----------------------Display logged in user----------------------------------
+app.post('/Users/Active_Users', (req,res) => {
+
+  //----------------setting no cors headers-------------------------
+
+//--------------------------------------------------------------------
+
+  var body_Acitve_Logged_in_user_Details = {
+    "type": "select",
+    "args": {
+        "table": "User_Details",
+        "columns": [
+            "User_Name",
+            "F_Name",
+            "L_Name",
+            "Pic_Id"
+        ],
+        "where": {
+            "Session_Id": {
+                "$ne": "NULL"
+            }
+        }
+    }
+};
+
+requestOptions.body = JSON.stringify(body_Acitve_Logged_in_user_Details);
+
+fetchAction(url_data, requestOptions)
+.then(function(response) {
+  return response.json();
+})
+.then(function(result) {
+  res.json(result);
+})
+.catch(function(error) {
+  console.log('Request Failed:' + error);
+  res.json({"message":"User does not exist"})
 });
 
 });
+// ------------------------------Url for updating device id-------------------------------
+
+app.post('/Users/Device_ID/Update', (req,res) => {
+  //----------------setting no cors headers-------------------------
+
+//--------------------------------------------------------------------
+
+var reg_body_Fire_Base_Device_Token_Update = {
+       "type": "update", 
+       "args": {
+       "table":"User_Details",
+       "where": {
+          "User_Name": {
+               "$eq": req.body.User_Name
+          }
+       },
+       "$set": {
+           "Device_Id": req.body.Device_Id
+       }
+  }
+};
+requestOptions.body = JSON.stringify(reg_body_Fire_Base_Device_Token_Update);
+
+fetchAction(url_data, requestOptions)
+.then(function(response) {
+  return response.json();
+  
+})
+.then(function(result) {
+  
+  console.log(JSON.stringify(result));
+  if(JSON.stringify(result) == '{"affected_rows":0}')
+  {
+    res.json({"message":"User Name Does not exist"});
+  }
+  res.json({"message":"Token Updated sucessfully ! "});
+
+})
+.catch(function(error) {
+
+  res.json({"message":"Error updating Firebase Token status"});
+}); 
+
+});
+//-----------------------------Pic_id_update----------------------------------------------- 
+app.post('/File_ID', (req,res) => {
+
+  //----------------setting no cors headers-------------------------
+
+//--------------------------------------------------------------------
+
+var pic_id = req.body.File_id;
+  localStorage.setItem('Pic_Id' , pic_id);
+
+
+var reg_body_Pic_Id_Update1 = {
+       "type": "update", 
+       "args": {
+       "table":"User_Details",
+       "where": {
+          "User_Name": {
+               "$eq": req.body.User_Name
+          }
+       },
+       "$set": {
+           "Pic_Id": localStorage.getItem('Pic_Id')
+       }
+  }
+};
+
+
+requestOptions.body = JSON.stringify(reg_body_Pic_Id_Update1);
+
+fetchAction(url_data, requestOptions)
+.then(function(response) {
+  return response.json();
+  
+})
+.then(function(result) {
+
+  console.log(result);
+  res.json({"Upload_Status":500,"File_Id": localStorage.getItem('Pic_Id')});
+
+})
+.catch(function(error) {
+
+  res.json({"Upload_Status":504,"File_Id": localStorage.getItem('Pic_Id')});
+}); 
+
+});
+// ------------------------Display message with-------------------------------------------*****NEW FEATURE******------------------
+app.post('/notification/display', (req,res) => {
+
+  //----------------setting no cors headers-------------------------
+
+//--------------------------------------------------------------------
+
+  var body_sending_Notification_Details = {
+    "type": "select",
+    "args": {
+        "table": "User_Notification_Store",
+        "columns": [
+            "To",
+            "From",
+            "Time_Stamp",
+            "Notification",
+            "Title",
+            "Status"
+        ],
+        "where": {
+            "User_Details": {
+                "$eq": req.body.User_Name
+            }
+        }
+    }
+};
+
+requestOptions.body = JSON.stringify(body_sending_Notification_Details);
+
+fetchAction(url_data, requestOptions)
+.then(function(response) {
+  return response.json();
+})
+.then(function(result) {
+  res.json(result);
+})
+.catch(function(error) {
+  console.log('Request Failed:' + error);
+  res.json({"message":"User Has not send any notification so far "})
+});
+
+});
+
+// -------------------------------------User Details Update link-----------------------------------------
+app.post('/user_details_update', (req,res) => {
+  //----------------setting no cors headers-------------------------
+
+//--------------------------------------------------------------------
+
+var body_User_Details_Update = {
+    "type": "update",
+    "args": {
+        "table": "User_Details",
+        "where": {
+            "User_Name": {
+                "$eq": req.body.User_Name
+            }
+        },
+        "$set": {
+            "Phone_No": req.body.Phone_No,
+            "F_Name": req.body.F_Name,
+            "L_Name": req.body.L_Name,
+            "User_Name": req.body.User_Name,
+            "Email_Id": req.body.Email_Id,
+            "Pass": req.body.Pass
+        }
+    }
+};
+
+requestOptions.body = JSON.stringify(body_User_Details_Update);
+
+fetchAction(url_data, requestOptions)
+.then(function(response) {
+  return response.json();
+  
+})
+.then(function(result) {
+
+  console.log(JSON.stringify(result));
+  res.json({"message":"Your Details have been updated "});
+
+})
+.catch(function(error) {
+
+  res.json({"message":"D.B->Error Creating account try after some time"});
+});
+}); 
 // Server Started
 app.listen(port);
 console.log('Test Server Started ! on port ' + port);

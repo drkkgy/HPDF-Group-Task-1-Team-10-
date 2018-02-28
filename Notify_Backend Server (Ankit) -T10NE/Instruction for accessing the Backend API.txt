@@ -4,7 +4,7 @@ Refferecen Hasura Docs v0.15 (Link:-https://docs.hasura.io/0.15/manual/getting-s
 -------------------------------------(No More in use)------------------------------
 Authetication (use by Web app only) -------------------------------------(No More in use)------------------------------
 ----------------------------------------------------
-https://auth.beginnings83.hasura-app.io/ui/?=XXXXXXXX -> Use this link to redirect the web-app to the login screen
+https://auth.astigmatic44.hasura-app.io/ui/?=XXXXXXXX -> Use this link to redirect the web-app to the login screen
 
 XXXXXXX = Url to your profile page which on success full login will redirect you to your home page 
 https://auth.beginnings83.hasura-app.io/ui/?=https://xyz.com
