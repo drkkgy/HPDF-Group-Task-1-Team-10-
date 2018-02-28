@@ -9,6 +9,10 @@ import java.util.List;
 
 // Needed for `react-native link`
 // import com.facebook.react.ReactApplication;
+import in.sriraman.sharedpreferences.RNSharedPreferencesReactPackage;
+import io.invertase.firebase.RNFirebasePackage;
+import io.invertase.firebase.messaging.RNFirebaseMessagingPackage;
+import com.evollu.react.fcm.FIRMessagingPackage;
 
 public class MainApplication extends MultiDexApplication {
 
@@ -19,7 +23,11 @@ public class MainApplication extends MultiDexApplication {
         // TODO: add cool native modules
 
         // Needed for `react-native link`
-        // new MainReactPackage()
+            new MainReactPackage(),
+            new RNSharedPreferencesReactPackage(),
+            new RNFirebasePackage(),
+            new RNFirebaseMessagingPackage(),
+            new FIRMessagingPackage()
     );
   }
 }
