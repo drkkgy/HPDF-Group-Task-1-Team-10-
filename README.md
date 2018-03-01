@@ -14,7 +14,7 @@ To get started perform the following steps on a windows 7/8/10 pc
 1.  Install node.js from https://nodejs.org/en/download/
 2.  Install Git from https://git-scm.com/download/win and start Git bash.
 3.  Create a directory ($mkdir C:\projects ) & enter it ($cd C:\projects)
-4.  Clone this repository with command ($git clone https://github.com/manishgrd/notify_webapp.git)
+4.  Clone this repository with command ($git clone https://github.com/drkkgy/HPDF-Group-Task-1-Team-10-)
 5.  After cloning completes, enter directory.($cd C:\projects\notify_frontend_webapp )
 6.  On gitbash run the command $npm install
     This will install all the required dependencies for the project.

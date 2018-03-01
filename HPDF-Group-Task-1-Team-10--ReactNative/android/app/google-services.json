@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "598821450820",
+    "firebase_url": "https://hasura-custom-notification.firebaseio.com",
+    "project_id": "hasura-custom-notification",
+    "storage_bucket": "hasura-custom-notification.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:598821450820:android:dd8fe93fecd43067",
+        "android_client_info": {
+          "package_name": "com.notify.notify"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "598821450820-c1pnotq6nmibts7hc3vagrhaobuktvr6.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.notify.notify",
+            "certificate_hash": "1cb5f740f321d932252c0cae5f5c0b532ebaad79"
+          }
+        },
+        {
+          "client_id": "598821450820-hgn6jsim36nlm6507surq4jsl362fbqa.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDx7L1ig-9oWVqJml0Vp8Tf447ZWjxggXM"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "598821450820-hgn6jsim36nlm6507surq4jsl362fbqa.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
