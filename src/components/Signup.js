@@ -9,27 +9,32 @@ import Paper from 'material-ui/Paper';
 import { Link } from 'react-router-dom'
 
 const style = {
-  height: 500,
+  height: 780,
   width: 500,
   margin: 10,
   display: 'inline-block',
 };
 
 
-const url = "https://auth.dankness95.hasura-app.io/v1/signup";
-
+const url = "https://auth.astigmatic44.hasura-app.io/v1/signup";
+let user='',passwd='',Fname='',Lname='',Email='',Phn='';
 const requestOptions = {
     "method": "POST",
     "headers": {
-        "Content-Type": "application/json"
-    }
+        "Content-Type": "application/x-www-form-urlencoded"
+    },
+
 };
 
   export default class Signup extends Component {
-      state = {
-        uname:'',
-        pwd:'',
-      }
+    state = {
+      fname:'',
+      lname:'',
+      uname:'',
+      pwd:'',
+      email:'',
+      phone:''
+    }
 
    change = (e) => {
      this.setState({
@@ -40,39 +45,90 @@ const requestOptions = {
    onSubmit=(e) =>{
      e.preventDefault();
      this.setState({
+       fname:'',
+       lname:'',
        uname:'',
        pwd:'',
+       email:'',
+       phone:''
      });
      this.signup();
    }
 
+   sendUserInfo = (auth,hid,user,passwd,Fname,Lname,Email,Phn) => {
 
-  signup = () => {
-    let body = {
-    "provider": "username",
-    "data": {   "username": this.state.uname,
-                "password": this.state.pwd,  }   };
+   var urlq = "https://data.astigmatic44.hasura-app.io/v1/query";
+   var requestOptionsQ = {
+      "method": "POST",
+      "headers": {"Content-Type": "application/json",
+                  "Authorization": "Bearer " + auth}};
 
-  requestOptions.body = JSON.stringify(body);
-  console.log(requestOptions);
-  fetch(url, requestOptions)
-  .then(function(response) {
-  	return response.json();
-  })
-  .then(function(result) {
-  	console.log(result);
-  	let authToken = result.auth_token
-  	window.localStorage.setItem('HASURA_AUTH_TOKEN', authToken);
-    if(result.auth_token!=null)
-    {   window.location.href = '/';
-      alert("AWESOME !! now login to continue");    }
-    else
-    alert("Something went wrong ! Try again !");
-  })
-  .catch(function(error) {
-  	alert('Request Failed:' + error);
-  });
-}
+        var body= {
+      "type": "insert",
+      "args": {
+          "table": "User_Details",
+          "objects": [{
+            "Hasura_Id": hid,
+            "User_Name": user,
+            "Pass": passwd,
+            "F_Name": Fname,
+            "L_Name": Lname,
+            "Email_Id": Email,
+            "Phone_No": Phn,
+          //  "Session_Id": auth,
+            }]}};
+
+        requestOptionsQ.body = JSON.stringify(body);
+
+       console.log(urlq, requestOptionsQ)
+        fetch(urlq, requestOptionsQ)
+        .then((response)=> {
+          console.log(response);
+          return response.json();
+        })
+        .then((result)=> {
+          alert("Success !! now login to continue");
+          window.location.href ='/';
+        })
+        .catch((error)=> {
+            alert('Request Failed:' + error);
+            window.location.href ='/signup';
+        });
+
+      }
+
+
+      signup = () => {
+        var body = {
+        "provider": "username",
+        "data": {   "username": this.state.uname,
+                    "password": this.state.pwd,  }   };
+      user=this.state.uname;
+      passwd=this.state.pwd;
+      Fname=this.state.fname;
+      Lname=this.state.lname;
+      Email=this.state.email;
+      Phn=this.state.phone;
+
+      requestOptions.body = JSON.stringify(body);
+      console.log(requestOptions);
+      fetch(url, requestOptions)
+      .then((response)=>{
+      	return response.json();
+      })
+      .then((result)=> {
+      	console.log(result);
+      	let authToken = result.auth_token; let h_id=result.hasura_id;
+      	window.localStorage.setItem('HASURA_AUTH_TOKEN', authToken);
+        if(result.auth_token!=null)
+       this.sendUserInfo(authToken,h_id,user,passwd,Fname,Lname,Email,Phn);
+        else
+        alert("Something went wrong ! Try again !");
+      })
+      .catch((error)=> {
+      	alert('Request Failed:' + error);
+      });
+    }
 
 
       render() {
@@ -85,7 +141,19 @@ const requestOptions = {
           <CardTitle
              title="To Signup (Register) " subtitle="Enter your Info & click SIGNUP" />
           <form>
-
+          <TextField
+              name="fname"
+              hintText="First Name"
+              floatingLabelText="Your First Name"
+              value={this.state.fname}
+              onChange={e =>this.change(e)}
+          /> <br/>
+          <TextField name="lname"
+                 hintText="Last Name"
+                 floatingLabelText="Your Last Name"
+                 value={this.state.lname}
+                 onChange={e =>this.change(e)}
+          /><br/>
           <TextField
               name="uname"
               hintText="Username"
@@ -99,7 +167,19 @@ const requestOptions = {
                  value={this.state.pwd}
                  onChange={e =>this.change(e)}
           /><br/>
-
+          <TextField
+              name="email"
+              hintText="Email ID"
+              floatingLabelText="Your Email ID"
+              value={this.state.email}
+              onChange={e =>this.change(e)}
+          /> <br/>
+          <TextField name="phone"
+                 hintText="Phone no."
+                 floatingLabelText="Your Phone no."
+                 value={this.state.phone}
+                 onChange={e =>this.change(e)}
+          /><br/>
           <br/>
           <RaisedButton onClick={(e)=>this.onSubmit(e)} label="SIGNUP" secondary={true} />
           <FlatButton label=" " disabled={true}/>

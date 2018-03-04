@@ -13,36 +13,33 @@ import CommunicationChatBubble from 'material-ui/svg-icons/communication/chat-bu
 
 //Todo : include file id/link in request sent to server to display each users profile image
 
-let names= []; let idv ='';
-let authToken = window.localStorage.getItem('HASURA_AUTH_TOKEN');
+ let idv =""; let idv_usr =""; let img_url="";
 export default class Sidebar extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state = {open: false,
+    this.state = {
+      usr_inf: "",
+      open: false,
       opend: false,
       Data : ['All Offline'],
+      message: "",
+      title:"",
+      Images : [],
                 };
   }
 
 
   setUsers() {
 
-    const url = "https://data.dankness95.hasura-app.io/v1/query";
+    const url = "https://api.astigmatic44.hasura-app.io/Users/Active_Users";
     let requestOptions = {
-        "method": "POST",
-        "headers": {
-            "Content-Type": "application/json",
-            "Authorization": "Bearer " + authToken,
-        }
-    };
-    const body = {
-        "type": "select",
-        "args": {
-            "table": "FCM_tokens",
-            "columns": [
-                "username",]
-              }};
+      "method": "POST",
+      "headers": {
+          "Content-Type": "application/x-www-form-urlencoded"
+      } };
+
+    const body = {};
     requestOptions.body = JSON.stringify(body);
 
    fetch(url, requestOptions)
@@ -50,18 +47,20 @@ export default class Sidebar extends React.Component {
      return response.json();
    })
    .then((adata) => {
-    this.setState({Data : adata.map((data)=>{return data.username })});
+    this.setState({Data : adata.map((data)=>{return data.User_Name+" ( "+data.F_Name+" "+data.L_Name+" )" })});
+    this.setState({Images : adata.map((data)=>{return data.Pic_Id })});
     }).catch((error) => {
       console.log("FAILED",error);
-                  })
-         }
+    })}
+
 
   componentWillMount(){
   this.setUsers();
+
   }
 
 
-  handleToggle = () => this.setState({open: !this.state.open});
+  handleToggle = () =>{ this.setState({open: !this.state.open}); this.setUsers();}
   handleClose = () => this.setState({open: false,opend: false});
   change = (e) => {
     this.setState({
@@ -71,21 +70,24 @@ export default class Sidebar extends React.Component {
 
   onSubmit=(e) =>{
     e.preventDefault();
-    this.props.sendnotif(idv,this.state.message);
+    this.props.sendnotif(idv_usr,this.state.title,this.state.message);
     this.setState({
       message:"",
+      title:"",
       open:false,
+      opend:false,
     });
+    this.handleClose();
 }
 
    listItems(values) {
-     return names.map((name) => {
-
+     return values.map((name,id) => {
+       img_url="https://filestore.astigmatic44.hasura-app.io/v1/file/"+this.state.Images[id];
       return (<ListItem
          key={name}
          onClick={()=>{idv = name; this.passUser();} }
          primaryText={name}
-         leftAvatar={<Avatar src="images/defaultUser.png" />}
+         leftAvatar={<Avatar src={img_url} />}
          rightIcon={<CommunicationChatBubble />}
        />);
 
@@ -95,7 +97,8 @@ export default class Sidebar extends React.Component {
 
 passUser = () => {
 this.handleClose();
-this.props.selectUser(idv);
+idv_usr=idv.substr(0,idv.indexOf(' ')); //extracting only username
+this.props.selectUser(idv_usr);
 this.setState({opend: true});
 }
 
@@ -106,7 +109,7 @@ this.setState({opend: true});
         secondary={true}
         onClick={(e)=>this.onSubmit(e)}
       />,
-      <FlatButton label=" "/>,
+      <FlatButton label=" " disabled={true}/>,
       <RaisedButton
         label="Close"
         primary={true}
@@ -115,16 +118,15 @@ this.setState({opend: true});
       />,
     ];
 
-    names = this.state.Data.map((arr) => {return arr});
     return (
       <div>
 
         <RaisedButton
           label="View Online"
           onClick={this.handleToggle}
-          backgroundColor="LimeGreen"
+          backgroundColor="#CE93D8"
         />
-        <Drawer width={250}
+        <Drawer width={350}
         openSecondary={true}
         open={this.state.open}
         docked={false}
@@ -132,21 +134,26 @@ this.setState({opend: true});
           <AppBar title="Online Users" />
 
           <List>
-             {this.listItems(names)}
+             {this.listItems(this.state.Data)}
             </List>
 
-         <MenuItem onClick={this.handleClose}>Close</MenuItem>
+         <MenuItem onClick={this.handleClose}><h3 backgroundcolor={"Orange"}><u>Close</u></h3></MenuItem>
 
         </Drawer>
 
         <Dialog
-          title="Compose notification for :"
+          title={"Composing for: "+idv}
           actions={actions}
           modal={false}
           open={this.state.opend}
           onRequestClose={this.handleClose}
         >
-      <h2>{idv}</h2>
+      <TextField  name="title"  fullWidth={true}
+                  floatingLabelText="Notifcation Title"
+                  multiLine={false}  rows={1}  rowsMax={1}
+                  value={this.state.title}
+                  onChange={e =>this.change(e)}
+            />
       <TextField  name="message"  fullWidth={true}
                   floatingLabelText="Enter Notifcation message below"
                   multiLine={true}  rows={2}  rowsMax={4}

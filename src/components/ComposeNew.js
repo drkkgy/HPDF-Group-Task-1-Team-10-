@@ -14,13 +14,14 @@ export default class ComposeNew extends React.Component {
     open: false,
     values: [],
     message: "",
+    title:"",
     Data : ['All Offline'],
   };
 }
 
 setUsers() {
    let authToken = window.localStorage.getItem('HASURA_AUTH_TOKEN');
-  const url = "https://data.dankness95.hasura-app.io/v1/query";
+  const url = "https://data.astigmatic44.hasura-app.io/v1/query";
   let requestOptions = {
       "method": "POST",
       "headers": {
@@ -31,10 +32,9 @@ setUsers() {
   const body = {
       "type": "select",
       "args": {
-          "table": "FCM_tokens",
-          "columns": [
-              "username",]
-            }};
+          "table": "User_Details",
+          "columns": ["*"],
+          "where": { "Device_Id": { "$ne": null}}}};
   requestOptions.body = JSON.stringify(body);
 
  fetch(url, requestOptions)
@@ -42,7 +42,7 @@ setUsers() {
    return response.json();
  })
  .then((adata) => {
-  this.setState({Data : adata.map((data)=>{return data.username })});
+  this.setState({Data : adata.map((data)=>{return data.User_Name+" ( "+data.F_Name+" "+data.L_Name+" )" })});
   }).catch((error) => {
     console.log("FAILED",error);
                 })
@@ -52,9 +52,6 @@ componentWillMount(){
 this.setUsers();
 }
 
-componentWillUpdate(){
-
-}
 
   change = (e) => {
     this.setState({
@@ -64,9 +61,13 @@ componentWillUpdate(){
 
   onSubmit=(e) =>{
     e.preventDefault();
-    this.props.sendnotif(this.state.values,this.state.message);
+   let idv_usr="",idv=this.state.values;
+   idv_usr=idv.substr(0,idv.indexOf(' ')); //extracting only username
+
+    this.props.sendnotif(idv_usr,this.state.title,this.state.message);
     this.setState({
       message:"",
+      title:"",
       open:false,
     });
 }
@@ -100,7 +101,7 @@ componentWillUpdate(){
         secondary={true}
         onClick={(e)=>this.onSubmit(e)}
       />,
-      <FlatButton label=" "/>,
+      <FlatButton label=" " disabled={true}/>,
       <RaisedButton
         label="Close"
         primary={true}
@@ -132,9 +133,14 @@ componentWillUpdate(){
         onChange={this.handleChange} >
         {this.menuItems(values)}
         </SelectField>
-
+        <TextField  name="title"  fullWidth={true}
+                  floatingLabelText="Notifcation Title"
+                  multiLine={false}  rows={1}  rowsMax={1}
+                  value={this.state.title}
+                  onChange={e =>this.change(e)}
+            />
       <TextField  name="message"  fullWidth={true}
-                  floatingLabelText="Enter Notifcation message below"
+                  floatingLabelText="Notifcation Message"
                   multiLine={true}  rows={2}  rowsMax={4}
                   value={this.state.message}
                   onChange={e =>this.change(e)}
