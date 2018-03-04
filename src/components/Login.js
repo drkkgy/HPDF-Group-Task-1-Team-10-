@@ -15,10 +15,10 @@ const style = {
   display: 'inline-block',
 };
 
-var fetchAction =  require('node-fetch');
+
 var authToken = null;
 
-var url = "https://auth.dankness95.hasura-app.io/v1/login";
+var url = "https://auth.astigmatic44.hasura-app.io/v1/login";
 
 var requestOptions = {
     "method": "POST",
@@ -45,8 +45,41 @@ var requestOptions = {
        uname:'',
        pwd:'',
      });
-     this.login();
+  this.login();
    }
+
+sendSessionID = (sessionid,username) => {
+  console.log(sessionid,username);
+var urlq = "https://data.astigmatic44.hasura-app.io/v1/query";
+var requestOptions = {
+   "method": "POST",
+   "headers": {"Content-Type": "application/json",
+               "Authorization": "Bearer " + sessionid},};
+     var body= {
+   "type": "update",
+   "args": {
+       "table": "User_Details",
+       "where": {
+           "User_Name": {
+               "$eq": username }},
+       "$set": { "Session_Id": sessionid }}};
+
+     requestOptions.body = JSON.stringify(body);
+    console.log(urlq, requestOptions)
+     fetch(urlq, requestOptions)
+     .then((response)=> {
+       console.log(response);
+       return response.json();
+     })
+     .then((result)=> {
+       console.log("Token Update",result);
+
+     })
+     .catch((error)=> {
+       console.log('Request Failed:' + error);
+     }); }
+
+
 login =()=> {
   var body = {
       "provider": "username",
@@ -58,17 +91,19 @@ login =()=> {
 
   requestOptions.body = JSON.stringify(body);
 
-  fetchAction(url, requestOptions)
-  .then(function(response) {
+  fetch(url, requestOptions)
+  .then((response)=> {
     return response.json();
   })
-  .then(function(result) {
-
+  .then((result)=> {
+   console.log(result);
     authToken = result.auth_token
     window.localStorage.setItem('HASURA_AUTH_TOKEN', authToken);
 
     if(authToken!=null)
-          window.location.href = '/home';
+    {   this.sendSessionID(result.auth_token,result.username);
+        window.location.href = '/home';
+      }
     else
         alert("Invalid credentials--Try Again !!");
   })
