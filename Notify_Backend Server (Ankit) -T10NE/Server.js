@@ -333,7 +333,7 @@ fetchAction(url_data, requestOptions)
   return response.json();
 })
 .then(function(result) {
-  localStorage.setItem('Time_Stamp', timestamp('YYYY/MM/DD:mm:ss'));// generating a time stamp
+	localStorage.setItem('Time_Stamp', timestamp('YYYY/MM/DD:mm:ss'));// generating a time stamp
   var token = result[0].Device_Id;// Change to Device id when finalizing 
   console.log(token);
   localStorage.setItem('Device_Id',token)// Change this also
@@ -530,24 +530,57 @@ requestOptions.body = JSON.stringify(body_remaing_Info_Update2);
 
 fetchAction(url, requestOptions)
 .then(function(response) {
-  return response.json();
+	return response.json();
 })
 .then(function(result) {
-  console.log(result);
+	console.log(result);
 })
 .catch(function(error) {
-  console.log('Request Failed:' + error);
+	console.log('Request Failed:' + error);
 });
   //--------------------------------------------------------------------------------------------------------
 
 })
 .catch(function(error) {
-  localStorage.setItem('Status', true);
+	localStorage.setItem('Status', true);
 
   //res.json({"message":"Something has gone wrong in Database connection"});
 }); 
 
-//---------------------------------------------------------------
+//-------------------------------------------------------Fetching file id from the server-------------------------------------------------------------------
+
+var body_pic_id_fetch = {
+    "type": "select",
+    "args": {
+        "table": "User_Details",
+        "columns": [
+            "Pic_Id"
+           
+        ],
+        "where": {
+            "User_Name": {
+                "$eq": req.body.User_Name_Sender//------->in notes
+            }
+        }
+    }
+};
+
+requestOptions.body = JSON.stringify(body_pic_id_fetch);
+
+fetchAction(url_data, requestOptions)
+.then(function(response) {
+  return response.json();
+})
+.then(function(result) {
+
+  localStorage.setItem('F_ID',result[0].Pic_Id);
+  console.log("Data fetched " + result);
+})
+.catch(function(error) {
+  console.log('Request Failed:' + error);
+ });
+
+//--------------------------------------------------------------------------------------------------------------------------
 
 var message = {
     to: localStorage.getItem('Device_Id'), // <--- change this also ::: required fill with device token or topics
@@ -557,7 +590,9 @@ var message = {
     },
     notification: {
         title: req.body.Title,
-        body: req.body.Notification_Message
+        body: req.body.Notification_Message,
+        icon: "https://filestore.astigmatic44.hasura-app.io/v1/file/" + localStorage.getItem('F_ID'),
+        click_action: "https://ui.astigmatic44.hasura-app.io/home"
     }
 };
 
@@ -876,7 +911,7 @@ app.post('/notification/display', (req,res) => {
 
 //--------------------------------------------------------------------
 
-  var body_sending_Notification_Details = {
+	var body_sending_Notification_Details = {
     "type": "select",
     "args": {
         "table": "User_Notification_Store",
