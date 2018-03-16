@@ -49,7 +49,6 @@ var requestOptions = {
    }
 
 sendSessionID = (sessionid,username) => {
-  console.log(sessionid,username);
 var urlq = "https://data.astigmatic44.hasura-app.io/v1/query";
 var requestOptions = {
    "method": "POST",
@@ -65,15 +64,13 @@ var requestOptions = {
        "$set": { "Session_Id": sessionid }}};
 
      requestOptions.body = JSON.stringify(body);
-    console.log(urlq, requestOptions)
      fetch(urlq, requestOptions)
      .then((response)=> {
        console.log(response);
        return response.json();
      })
      .then((result)=> {
-       console.log("Token Update",result);
-
+       //console.log("Token Update",result);
      })
      .catch((error)=> {
        console.log('Request Failed:' + error);
@@ -96,7 +93,6 @@ login =()=> {
     return response.json();
   })
   .then((result)=> {
-   console.log(result);
     authToken = result.auth_token
     window.localStorage.setItem('HASURA_AUTH_TOKEN', authToken);
 

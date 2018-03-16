@@ -1,5 +1,5 @@
-importScripts("https://www.gstatic.com/firebasejs/4.9.0/firebase-app.js");
-importScripts("https://www.gstatic.com/firebasejs/4.9.0/firebase-messaging.js");
+importScripts("https://www.gstatic.com/firebasejs/4.9.1/firebase-app.js");
+importScripts("https://www.gstatic.com/firebasejs/4.9.1/firebase-messaging.js");
 
 
 // Initialize Firebase
@@ -10,7 +10,7 @@ const config = {
   const messaging = firebase.messaging();
   // [START background_handler]
   messaging.setBackgroundMessageHandler(function(payload) {
-    console.log('[firebase-messaging-sw.js] Received background message ', payload);
+    console.log('Received background message ', payload);
     // Customize notification here
     const notificationTitle = 'Notify App';
     const notificationOptions = {

@@ -82,7 +82,6 @@ componentDidMount() {
   handleChange = (event, index, value) => this.setState({value});
 
   deleteSessionID = (username) => {
-    console.log(username);
   const urlq = "https://data.astigmatic44.hasura-app.io/v1/query";
   var requestOptions = {
      "method": "POST",
@@ -93,7 +92,6 @@ componentDidMount() {
          "where": {"User_Name": { "$eq": username } },
          "$set": {"Session_Id": null}}};
        requestOptions.body = JSON.stringify(body);
-      console.log(urlq, requestOptions)
        fetch(urlq, requestOptions)
        .then((response)=> {
          return response.json();

@@ -5,7 +5,7 @@ import Topnavbar from './Topnavbar';
 import NotifDisplay from './NotifDisplay';
 import ActionsBar from './ActionsBar';
 import Ntable from './Ntable';
-import * as firebase from 'firebase';
+//import {post} from 'form-urlencoded-post';
 
 const style = {
   height: 910,
@@ -77,19 +77,19 @@ handlenotif=(user,title,message)=>  //get user to send notification
   this.sendNotif(username,user,title,message); //sending notification to end-user
 }
 
-sendNotif =(from,to,title,msg)=> {
+sendNotif =(fromN,toN,titleN,messageN)=> {
   const url = "https://api.astigmatic44.hasura-app.io/auth/Send_Notification";
   requestOptions = {
       "method": "POST",
-      "headers": {"Content-Type": "application/x-www-form-urlencoded"}};
+      "headers": {"Content-Type": "application/json"}};
   body = {
-      "User_Name_Sender": from,
-      "Title": title,
-      "Notification_Message": msg,
-      "User_Name_Reciever": to
+    "User_Name_Reciever": toN,
+    "User_Name_Sender": fromN,
+    "Title": titleN,
+    "Notification_Message": messageN
   };
-requestOptions.body = body;
-console.log(url, requestOptions)
+requestOptions.body = JSON.stringify(body);
+console.log(url, requestOptions);
 fetch(url, requestOptions)
 .then((response)=> {
   return response.json();
@@ -117,7 +117,7 @@ return(
   <div>
     <Paper style={style} zDepth={5} rounded={true} >
     <Topnavbar getUserInfo={this.setUserInfo}/>
-    <NotifDisplay sendfcmtoken={this.sendToken}/>
+    <NotifDisplay/>
     <Snackbar
            open={this.state.snack}
            message={this.state.snackmsg}
@@ -131,3 +131,4 @@ return(
      );
    }
 }
+// sendfcmtoken={this.sendToken}

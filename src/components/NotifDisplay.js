@@ -55,6 +55,7 @@ let requestOptionsQ = {  "method": "POST",
         "$set": { "Device_Id": currentToken }}};
 
       requestOptionsQ.body = JSON.stringify(body);
+    //  console.log(urq, requestOptionsQ);
       fetch(urq, requestOptionsQ)
       .then(function(response) {
         return response.json();
@@ -88,7 +89,7 @@ let requestOptionsQ = {  "method": "POST",
        this.sendToken(token);   //send token to server
        })
      .catch((error) => {
-      console.log('Token Updation:' + error);
+    //  console.log('Token Updation:' + error);
      });
        })
        .catch((err)=> {
@@ -96,11 +97,12 @@ let requestOptionsQ = {  "method": "POST",
       });
 
   msg.onMessage(payload => {
+    console.log(payload);
       this.getNotifTime(); if(payload.notification)
       this.setState({
          notif: payload.notification.body,
          peer: payload.notification.title,
-         usrimg: payload.notification.usrimg ? payload.notification.usrimg : "/images/defaultUser.png",
+         usrimg: payload.notification.icon ? payload.notification.icon : "/images/defaultUser.png",
          snack: true });
     });  }
 

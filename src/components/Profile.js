@@ -186,7 +186,7 @@ render(){
         <br/>
         <h4> Edit Your Profile </h4>
         <br/><br/>
-        <img src={this.state.file_url} alt="Profile Image" height="120" width="120"/>
+        <img src={this.state.file_url} alt={this.state.user} height="120" width="120"/>
         <h5> <u>Username</u>: {this.state.user}</h5>
 		<br/>
         <label>

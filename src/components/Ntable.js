@@ -7,10 +7,10 @@ import {
   TableRow,
   TableRowColumn,
 } from 'material-ui/Table';
-import {BottomNavigation, BottomNavigationItem} from 'material-ui/BottomNavigation';
-import Paper from 'material-ui/Paper';
-import Delete from 'material-ui/svg-icons/action/delete';
-import View from 'material-ui/svg-icons/action/view-list';
+//import {BottomNavigation, BottomNavigationItem} from 'material-ui/BottomNavigation';
+//import Paper from 'material-ui/Paper';
+//import Delete from 'material-ui/svg-icons/action/delete';
+//import View from 'material-ui/svg-icons/action/view-list';
 //import Notify from 'material-ui/svg-icons/social/notifications';
 import {Tabs, Tab} from 'material-ui/Tabs';
 //import Received from 'material-ui/svg-icons/navigation/arrow-back';
@@ -19,9 +19,9 @@ import FlatButton from 'material-ui/FlatButton';
 import RaisedButton from 'material-ui/RaisedButton';
 
 
-const view = <View />;
+//const view = <View />;
 //const notify = <Notify />;
-const clear = <Delete />;
+//const clear = <Delete />;
 
 let url = "https://data.astigmatic44.hasura-app.io/v1/query";
 let authToken = window.localStorage.getItem('HASURA_AUTH_TOKEN');
@@ -68,6 +68,7 @@ export default class Ntable extends Component {
 
 handleCellClick =(rowNumber)=>{
   dlg = selectMsg[rowNumber];
+  this.handleOpen();
 }
 
 handleClose = () => this.setState({opend: false});
@@ -86,13 +87,13 @@ fetch(url, requestOptions)
 	return response.json();
 })
 .then(function(result) {
-	console.log(result);
+	//console.log(result);
 })
 .catch(function(error) {
 	console.log('Request Failed:' + error);
 });
 this.handleClose();
-window.location.href = '/home';
+//window.location.href = '/home';
 }
   componentDidMount() {
     this.getUserInfo();
@@ -107,7 +108,6 @@ window.location.href = '/home';
       })
       .then((result) => {
       this.getMessages(result.username);
-
       })
       .catch((error) => {
         console.log('User info retrieval:' + error);
@@ -136,7 +136,7 @@ fetch(url, requestOptions)
 }
 
 showMessages=()=>{
-  let recentMsg=this.state.Messages.map((val) => {return ([val.id,val.Time_Stamp,val.From,val.To,val.Notification])});
+  let recentMsg=this.state.Messages.map((val) => {return ([val.id,val.Time_Stamp,val.From,val.To,val.Title,val.Notification])});
  selectMsg=recentMsg.reverse();
   }
 
@@ -178,7 +178,7 @@ let row = (x,i) =>
 
         </Tabs>
         <Dialog
-          title={dlg[1]}
+          title={"Time: "+dlg[1]}
           actions={actions}
           modal={false}
           open={this.state.opend}
@@ -196,6 +196,7 @@ let row = (x,i) =>
               <TableHeaderColumn>TIME</TableHeaderColumn>
               <TableHeaderColumn>FROM</TableHeaderColumn>
               <TableHeaderColumn>TO</TableHeaderColumn>
+              <TableHeaderColumn>TITLE</TableHeaderColumn>
               <TableHeaderColumn>MESSAGE </TableHeaderColumn>
             </TableRow>
           </TableHeader>
@@ -203,30 +204,33 @@ let row = (x,i) =>
             {selectMsg.map((x,i)=>row(x,i))}
           </TableBody>
         </Table>
-        <Paper zDepth={1}>
-          <BottomNavigation >
-            <BottomNavigationItem
-              label="View"
-              icon={view}
-              onClick={() => this.handleOpen()}
-            />
-            <BottomNavigationItem
-              label="Clear"
-              icon={clear}
-              onClick={() => this.handleDelete()}
-            />
-           </BottomNavigation>
-        </Paper>
+
         </div>
         )
 }
 }
 
 /*
-<BottomNavigationItem
-  label="Notify others"
-  icon={notify}
-  onClick={() => this.handleCompose()}
-/>
+
+<Paper zDepth={1}>
+  <BottomNavigation >
+    <BottomNavigationItem
+      label="View"
+      icon={view}
+      onClick={() => this.handleOpen()}
+    />
+    <BottomNavigationItem
+      label="Clear"
+      icon={clear}
+      onClick={() => this.handleDelete()}
+    />
+    <BottomNavigationItem
+      label="Notify others"
+      icon={notify}
+      onClick={() => this.handleCompose()}
+    />
+   </BottomNavigation>
+</Paper>
+
 
 */
