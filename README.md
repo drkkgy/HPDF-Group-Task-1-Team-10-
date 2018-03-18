@@ -1,5 +1,6 @@
 This project was bootstrapped with [Create React App](https://github.com/facebookincubator/create-react-app).
 
+# React JS Notify App
 
 To get started perform the following steps on a windows 7/8/10 pc
 1.  Install node.js from https://nodejs.org/en/download/
@@ -14,9 +15,9 @@ To get started perform the following steps on a windows 7/8/10 pc
     with address localhost:3000 or 127.0.0.1:3000
 8.	There it is, the Notify app is running locally.
 9. The backend is hosted at hasura.io along with Google firebase integration.
-
-      About the Notify Frontend for Web--(Runs both locally & hosted at hasura.io)
-	  
+      
+ #### User-guide for Notify Webapp--(Runs both locally & hosted at hasura.io)
+ 
 	  https://ui.astigmatic44.hasura-app.io
 	  
 10. Login & Signup with the appropriate credentials. On first login the user is asked for permission to show notifications & the status is displayed below. 

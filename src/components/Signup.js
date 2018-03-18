@@ -21,7 +21,7 @@ let user='',passwd='',Fname='',Lname='',Email='',Phn='';
 const requestOptions = {
     "method": "POST",
     "headers": {
-        "Content-Type": "application/x-www-form-urlencoded"
+        "Content-Type": "application/json"
     },
 
 };
@@ -163,7 +163,7 @@ const requestOptions = {
           /> <br/>
           <TextField name="pwd" type="password"
                  hintText="Password"
-                 floatingLabelText="A Password to Login"
+                 floatingLabelText="Min 8 Characters"
                  value={this.state.pwd}
                  onChange={e =>this.change(e)}
           /><br/>
@@ -181,7 +181,7 @@ const requestOptions = {
                  onChange={e =>this.change(e)}
           /><br/>
           <br/>
-          <RaisedButton onClick={(e)=>this.onSubmit(e)} label="SIGNUP" secondary={true} />
+          <RaisedButton onClick={(e)=>{(this.state.uname && this.state.pwd)?this.onSubmit(e):alert('Username / Password missing')}} label="SIGNUP" secondary={true} />
           <FlatButton label=" " disabled={true}/>
           <Link to='/'><RaisedButton label="Login" primary={true} /></Link>
           </form>

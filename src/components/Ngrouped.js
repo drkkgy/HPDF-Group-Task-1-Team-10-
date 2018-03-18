@@ -52,7 +52,7 @@ sendTokenToServer  = (tokens) => {
   console.log(username,tokens);
   url = "https://api.astigmatic44.hasura-app.io/Users/Device_ID/Update";
   requestOptions = { "method": "POST",
-      "headers": {"Content-Type": "application/x-www-form-urlencoded"}};
+      "headers": {"Content-Type": "application/json"}};
    body = {"User_Id": username,
       "Device_Id": tokens};
 

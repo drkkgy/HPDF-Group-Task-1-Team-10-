@@ -186,7 +186,8 @@ let row = (x,i) =>
         >
          <h5><u>Message ID:</u>  {dlg[0]}</h5>
          <strong> From : </strong> {dlg[2]}  <strong>To : </strong> {dlg[3]}
-         <h3><u>Message:</u> {dlg[4]}</h3>
+         <h3><u>Title:</u> {dlg[4]}</h3>
+         <h4><u>Message:</u> {dlg[5]}</h4>
 
         </Dialog>
         <Table onRowSelection={this.handleRowSelection} onCellClick={this.handleCellClick} multiSelectable={false} height={this.props.data.height} fixedHeader={false} style={{ tableLayout: 'auto' }}>
