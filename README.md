@@ -39,32 +39,20 @@ This part of project was bootstrapped with [Create React App](https://github.com
  #### User-guide for Notify Webapp--(Runs both locally & hosted at hasura.io)	
 	  
 10. Login & Signup with the appropriate credentials. On first login the user is asked for permission to show notifications & the status is displayed below. 
-
-11. On login the user is taken to the homepage from where they can see the latest notifications appearing just below the top navigation bar.
-
-12. The Navigation bar at the topmost has Buttons to switch back from anypage to homepage and logout the user. 
-    Also the user is greeted along with a display of their profile pic.
-
+11. On login the user is taken to the homepage from where they can see the latest notifications appearing just below the navigation bar.
+12. The Navigation bar at the topmost has Buttons to switch back from anypage to homepage and logout the user. Also the user is greeted along with a display of their profile pic.
 13. Four buttons are present on the action bar for the following functions:
    (a)Compose New: Opens a dialog box to select the user and enter the notification message and press Push button to notify the user.
    (b)View Online: Opens up a drawer on the right listing the online users to notify them directly. 
       Clicking on any user open the compose box with that user preselected
-   (c)All Notifications: opens a separate page listing all the notifications users sent / received in a tabular format that is scrollable.
+   (c)All Notifications: opens a separate page listing all the notifications users sent / received in a tabular format that is      scrollable.
    (d)User Profile: To edit the already created user information & upload a profile image
-
-14. Tabular view to see at a glance some of the recent notifications which can be selected for following actions in Bottom navigation bar.
-
-15. To View the full Notification details in a pop up dialog, the user has to click on any particular row in the table.
- 
-16. The pop up also provides the Close & Delete Button performing the respective options on the opened Notification message
-	
+14. Tabular view to glance some of the recent notifications which can be selected for following actions in Bottom navigation bar.
+15. To View the full Notification details in a pop up dialog, the user has to click on any particular row in the table. 
+16. The pop up also provides the Close & Delete Button performing the respective options on the opened Notification message	
 17. A snackbar that momentarily pops below when a new notification arrives or successfully get delivered, to grab users attention.
-
-18. When the Notify app has active tab & browser focus , notification appears in the Notification area inside the app above the actions bar.
-
+18. When the Notify app has active tab & browser focus, notification appears in the Notification area inside the app above the actions bar.
 19. When browser is closed or app is not in focus i.e. some other tab in the browser is active Notifications appear on right side of the screen.
-
 20. Clicking the logout button logs out the user & redirects to login page for re-authentication.
-
 21. This Notify app is compatible with the mobile browsers also, that support notifications.
 	 
