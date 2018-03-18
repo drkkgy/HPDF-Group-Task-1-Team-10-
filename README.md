@@ -1,8 +1,28 @@
-This project was bootstrapped with [Create React App](https://github.com/facebookincubator/create-react-app).
+# This project consists of 3 parts :
+#### A) Node Express based Backend hosted at hasura.io
+#### B) React Native Notify Android App
+#### C) ReactJS Notify WebApp
 
-# React JS Notify App
+## A) Node Express Backend APIs for Notify App
 
-To get started perform the following steps on a windows 7/8/10 pc
+Follow the Instructions & Readme inside [Notify_Backend Server (Ankit) -T10NE] folder of this repository. 
+
+## B) React JS Notify Android App (React Native)
+
+Install the app on an Android device using this [APK link](https://github.com/drkkgy/HPDF-Group-Task-1-Team-10-/blob/master/NOTIFY_ANDROID/Notify_HPDF.apk)
+
+[Follow User guide]( https://youtu.be/4zouN0oF1fY)
+
+Note: This repository has a zipped ReactNative code & APK in NOTIFY_ANDROID directory. The git repo is present at [Link](https://github.com/manishgrd/notify_RN)
+
+## C)React JS Notify WebApp
+Note: The git repo is present at [Link](https://github.com/manishgrd/notify_webapp)
+
+Hosted WebApp Link   https://ui.astigmatic44.hasura-app.io
+
+This part of project was bootstrapped with [Create React App](https://github.com/facebookincubator/create-react-app).
+
+#### To get started locally perform the following steps on a windows 7/8/10 pc
 1.  Install node.js from https://nodejs.org/en/download/
 2.  Install Git from https://git-scm.com/download/win and start Git bash.
 3.  Create a directory ($mkdir C:\projects ) & enter it ($cd C:\projects)
@@ -16,9 +36,7 @@ To get started perform the following steps on a windows 7/8/10 pc
 8.	There it is, the Notify app is running locally.
 9. The backend is hosted at hasura.io along with Google firebase integration.
       
- #### User-guide for Notify Webapp--(Runs both locally & hosted at hasura.io)
- 
-	  https://ui.astigmatic44.hasura-app.io
+ #### User-guide for Notify Webapp--(Runs both locally & hosted at hasura.io)	
 	  
 10. Login & Signup with the appropriate credentials. On first login the user is asked for permission to show notifications & the status is displayed below. 
 
