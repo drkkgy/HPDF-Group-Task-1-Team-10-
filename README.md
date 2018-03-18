@@ -15,10 +15,11 @@ Install the app on an Android device using this [APK link](https://github.com/dr
 
 [Follow User guide]( https://youtu.be/4zouN0oF1fY)
 
-Note: This repository has a zipped ReactNative code & APK in NOTIFY_ANDROID directory. The git repo is present at [Link](https://github.com/manishgrd/notify_RN)
+Note: This repository has a zipped ReactNative code & APK in NOTIFY_ANDROID directory. 
+Along with this Repository, there is a standalone git repo present at [Link](https://github.com/manishgrd/notify_RN)
 
 ## C) React JS Notify WebApp
-Note: The git repo is present at [Link](https://github.com/manishgrd/notify_webapp)
+Note: Along with this Repository, there is a standalone  standalone git repo present at [Link](https://github.com/manishgrd/notify_webapp)
 
 Hosted WebApp Link   https://ui.astigmatic44.hasura-app.io
 
