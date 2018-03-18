@@ -3,6 +3,8 @@
 #### B) React Native Notify Android App
 #### C) ReactJS Notify WebApp
 
+Hosted WebApp Link   https://ui.astigmatic44.hasura-app.io
+
 ## A) Node Express Backend APIs for Notify App
 
 Follow the Instructions & Readme inside [Notify_Backend Server (Ankit) -T10NE] folder of this repository. 
@@ -15,12 +17,10 @@ Install the app on an Android device using this [APK link](https://github.com/dr
 
 Note: This repository has a zipped ReactNative code & APK in NOTIFY_ANDROID directory. The git repo is present at [Link](https://github.com/manishgrd/notify_RN)
 
-## C)React JS Notify WebApp
+## C) React JS Notify WebApp
 Note: The git repo is present at [Link](https://github.com/manishgrd/notify_webapp)
 
 Hosted WebApp Link   https://ui.astigmatic44.hasura-app.io
-
-This part of project was bootstrapped with [Create React App](https://github.com/facebookincubator/create-react-app).
 
 #### To get started locally perform the following steps on a windows 7/8/10 pc
 1.  Install node.js from https://nodejs.org/en/download/
